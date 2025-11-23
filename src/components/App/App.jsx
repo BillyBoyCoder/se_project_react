@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Header from "../Header/Header";
 import Main from "../Main/Main";
 import Footer from "../Footer/Footer";
 import ItemModal from "../ItemModal/ItemModal";
 import { defaultClothingItems } from "../../utils/defaultClothing";
+import { getWeather } from "../../utils/weatherApi";
 import "./App.css";
 
 function App() {
@@ -14,6 +15,15 @@ function App() {
   const [activeModal, setActiveModal] = useState("");
   // State to track which card was clicked
   const [selectedCard, setSelectedCard] = useState(null);
+  // State to hold weather data
+  const [weatherData, setWeatherData] = useState({ city: "", temp: 0 });
+  // State to track current temperature unit (F or C)
+  const [currentTemperatureUnit, setCurrentTemperatureUnit] = useState("F");
+
+  // Handler to toggle temperature unit
+  const handleToggleSwitchChange = () => {
+    setCurrentTemperatureUnit(currentTemperatureUnit === "F" ? "C" : "F");
+  };
 
   // Handler to open the item modal
   // Sets activeModal to "active-modal" to display the modal
@@ -29,12 +39,29 @@ function App() {
     setActiveModal("");
   }
 
+  // useEffect to fetch weather data when component mounts
+  useEffect(() => {
+    getWeather()
+      .then((data) => {
+        setWeatherData(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching weather data:", error);
+      });
+  }, []); // Empty dependency array means this runs once on mount
+
   return (
     <div className="app">
-      <Header />
+      <Header 
+        weatherData={weatherData} 
+        currentTemperatureUnit={currentTemperatureUnit}
+        handleToggleSwitchChange={handleToggleSwitchChange}
+      />
       <Main
         clothingItems={clothingItems}
         handleOpenItemModal={handleOpenItemModal}
+        weatherData={weatherData}
+        currentTemperatureUnit={currentTemperatureUnit}
       />
       <Footer />
       {/* Render ItemModal and pass isOpen prop */}

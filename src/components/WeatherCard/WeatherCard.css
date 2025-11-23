@@ -3,7 +3,7 @@
   display: flex;
   justify-content: center;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0px;
   width: 100%;
   max-width: calc(1360px + 40px);
   height: 80px;

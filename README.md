@@ -63,11 +63,16 @@ se_project_react/
     │   ├── WeatherCard/
     │   │   ├── WeatherCard.css
     │   │   └── WeatherCard.jsx
-    │   └── ItemCard/
-    │       ├── ItemCard.css
-    │       └── ItemCard.jsx
+    │   ├── ItemCard/
+    │   │   ├── ItemCard.css
+    │   │   └── ItemCard.jsx
+    │   └── ToggleSwitch/
+    │       ├── ToggleSwitch.css
+    │       └── ToggleSwitch.jsx
     ├── utils/
-    │   └── defaultClothing.js
+    │   ├── constants.js
+    │   ├── defaultClothing.js
+    │   └── weatherApi.js
     └── vendor/
         ├── normalize.css
         └── fonts/

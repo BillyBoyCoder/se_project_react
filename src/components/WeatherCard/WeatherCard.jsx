@@ -1,15 +1,15 @@
-import weatherConditionsCard from '../../assets/images/weatherConditionsCard.svg';
+import cloudy from '../../assets/images/cloudy.svg';
 import './WeatherCard.css';
 
-function WeatherCard() {
+function WeatherCard({ temp, currentTemperatureUnit }) {
   return (
     <section className="weather-card">
       <img
-        src={weatherConditionsCard}
+        src={cloudy}
         alt="WeatherCard illustration"
         className="weather-card__image"
       />
-      <p className="weather-card__temp">75&deg;F</p>
+      <p className="weather-card__temp">{temp}&deg;{currentTemperatureUnit}</p>
     </section>
   );
 }

@@ -1,0 +1,33 @@
+// Weather API functions for the WTWR application
+
+import { coordinates, apiKey } from "./constants";
+
+// Base URL for OpenWeatherMap API
+const baseUrl = "https://api.openweathermap.org/data/2.5/weather";
+
+// Function to check if the response is ok
+const checkResponse = (res) => {
+  if (res.ok) {
+    return res.json();
+  }
+  return Promise.reject(`Error: ${res.status}`);
+};
+
+// Function to parse weather data from API response
+const parseWeatherData = (data) => {
+  const city = data.name;
+  const temp = Math.round(data.main.temp);
+  
+  return { city, temp };
+};
+
+// Function to get weather data by coordinates
+export const getWeather = () => {
+  const url = `${baseUrl}?lat=${coordinates.lat}&lon=${coordinates.lon}&units=imperial&appid=${apiKey}`;
+  
+  return fetch(url)
+    .then(checkResponse)
+    .then(parseWeatherData);
+};
+
+

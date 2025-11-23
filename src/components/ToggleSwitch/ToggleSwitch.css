@@ -1,0 +1,43 @@
+.toggle-switch {
+ width: 56px;
+height: 28px;
+border: 2px solid #7e7e7e;
+color: #7e7e7e;
+border-radius: 20px;
+padding: 0 10px;
+box-sizing: border-box;
+display: flex;
+align-items: center;
+justify-content: space-between;
+position: relative;
+}
+
+.toggle-switch__checkbox {
+  visibility: hidden;
+  position: absolute;
+}
+
+.toggle-switch__circle {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: #000;
+  z-index: 0;
+  left: -2px;
+  transition: left 0.3s ease;
+}
+
+.toggle-switch__checkbox:checked + .toggle-switch__circle {
+  left: 26px;
+}
+
+.toggle-switch__value {
+  color: #7e7e7e;
+  font-size: 14px;
+  line-height: 1;
+  font-weight: 700;
+  font-family:  'Cabinet Grotesk', 'Helvetica Neue', Arial, sans-serif;
+  position: relative;
+  z-index: 1;
+}

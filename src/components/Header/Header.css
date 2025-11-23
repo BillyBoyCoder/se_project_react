@@ -1,13 +1,26 @@
 .header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   padding: 20px;
   max-width: 1360px;
   margin: 0 auto;
 }
 
+.header__side-left {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.header__side-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
 .header__logo {
-  margin-right: 24px;
+  margin-right: 0;
   width: 89px;
   height: 40px;
 }
@@ -34,7 +47,7 @@
 }
 
 .header__add-clothes-btn {
-  margin-left: auto;
+  margin-left: 0;
   padding: 10px 20px;
   background: transparent;
   border: none;
@@ -48,7 +61,7 @@
 }
 
 .header__username {
-  margin: 0 0 0 20px;
+  margin: 0;
   font-family: "Cabinet Grotesk", "Helvetica Neue", Arial, sans-serif;
   font-weight: 700;
   font-style: bold;
@@ -59,7 +72,7 @@
 }
 
 .header__avatar {
-  margin-left: 12px;
+  margin-left: 0;
   width: 40px;
   height: 40px;
   border: 1px solid rgba(0, 0, 0, 0.5);
