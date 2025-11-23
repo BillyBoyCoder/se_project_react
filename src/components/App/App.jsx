@@ -9,7 +9,7 @@ import "./App.css";
 
 function App() {
   // State to hold an object of clothing items
-  const [clothingItems, setClothingItems] = useState(defaultClothingItems);
+  const [clothingItems, setClothingItems] = useState([]);
   // State to track which modal is currently active
   // Empty string means no modal is open
   const [activeModal, setActiveModal] = useState("");
@@ -49,6 +49,12 @@ function App() {
         console.error("Error fetching weather data:", error);
       });
   }, []); // Empty dependency array means this runs once on mount
+
+
+useEffect(() => {
+  setClothingItems(defaultClothingItems);
+}, []);
+
 
   return (
     <div className="app">

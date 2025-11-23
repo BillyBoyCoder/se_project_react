@@ -40,11 +40,24 @@ se_project_react/
     │       ├── logo.svg
     │       ├── avatarTrue.svg
     │       ├── avatarFalse.svg
-    │       └── weatherConditionsCard.svg
+    │       ├── sunny.svg
+    │       ├── cloudy.svg
+    │       ├── fog.svg
+    │       ├── rain.svg
+    │       ├── snow.svg
+    │       ├── storm.svg
+    │       ├── night.svg
+    │       ├── cloudyNight.svg
+    │       ├── foggyNight.svg
+    │       ├── rainyNight.svg
+    │       ├── snowyNight.svg
+    │       └── stormyNight.svg
     ├── components/
     │   ├── App/
     │   │   ├── App.css
     │   │   └── App.jsx
+    │   ├── contexts/
+    │   │   └── CurrentTemperatureUnitContext.js
     │   ├── Header/
     │   │   ├── Header.css
     │   │   └── Header.jsx

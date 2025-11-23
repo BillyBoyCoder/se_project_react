@@ -40,4 +40,17 @@ position: relative;
   font-family:  'Cabinet Grotesk', 'Helvetica Neue', Arial, sans-serif;
   position: relative;
   z-index: 1;
+  transition: color 0.3s ease;
+}
+
+.toggle-switch__value_left {
+  color: white;
+}
+
+.toggle-switch__checkbox:checked ~ .toggle-switch__value_left {
+  color: #7e7e7e;
+}
+
+.toggle-switch__checkbox:checked ~ .toggle-switch__value_right {
+  color: white;
 }
