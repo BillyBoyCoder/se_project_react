@@ -7,7 +7,7 @@ import NewGarment from "../NewGarment/NewGarment";
 import { defaultClothingItems } from "../../utils/defaultClothing";
 import { getWeather } from "../../utils/weatherApi";
 import { getWeatherCondition } from "../../utils/weatherUtils";
-import CurrentTemperatureUnitContext from "../contexts/CurrentTemperatureUnitContext";
+import CurrentTemperatureUnitContext from "../../utils/contexts/CurrentTemperatureUnitContext";
 import "./App.css";
 
 function App() {

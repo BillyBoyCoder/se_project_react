@@ -1,6 +1,6 @@
 import cloudy from '../../assets/images/cloudy.svg';
 import { useContext } from 'react';
-import CurrentTemperatureUnitContext from '../contexts/CurrentTemperatureUnitContext';
+import CurrentTemperatureUnitContext from '../../utils/contexts/CurrentTemperatureUnitContext';
 import './WeatherCard.css';
 
 function WeatherCard({ temp }) {

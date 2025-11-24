@@ -56,8 +56,6 @@ se_project_react/
     │   ├── App/
     │   │   ├── App.css
     │   │   └── App.jsx
-    │   ├── contexts/
-    │   │   └── CurrentTemperatureUnitContext.js
     │   ├── Header/
     │   │   ├── Header.css
     │   │   └── Header.jsx
@@ -87,8 +85,11 @@ se_project_react/
     │       └── ToggleSwitch.jsx
     ├── utils/
     │   ├── constants.js
+    │   ├── contexts/
+    │   │   └── CurrentTemperatureUnitContext.js
     │   ├── defaultClothing.js
-    │   └── weatherApi.js
+    │   ├── weatherApi.js
+    │   └── weatherUtils.js
     └── vendor/
         ├── normalize.css
         └── fonts/
