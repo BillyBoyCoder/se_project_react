@@ -3,15 +3,10 @@ import ItemCard from "../ItemCard/ItemCard";
 import "./Main.css";
 
 function Main({ clothingItems, handleOpenItemModal, weatherData, currentTemperatureUnit }) {
-  // Convert Fahrenheit to Celsius
-  const convertToCelsius = (tempF) => {
-    return Math.round((tempF - 32) * (5 / 9));
-  };
-
   // Get the temperature in the current unit
   const displayTemp = currentTemperatureUnit === "F" 
-    ? weatherData.temp 
-    : convertToCelsius(weatherData.temp);
+    ? weatherData.temp.F 
+    : weatherData.temp.C;
 
   return (
     <main className="main">

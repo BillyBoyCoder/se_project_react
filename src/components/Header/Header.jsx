@@ -4,7 +4,7 @@ import avatarTrue from "../../assets/images/avatarTrue.svg";
 import ToggleSwitch from "../ToggleSwitch/ToggleSwitch";
 import "./Header.css";
 
-function Header({ weatherData, currentTemperatureUnit, handleToggleSwitchChange }) {
+function Header({ weatherData, currentTemperatureUnit, handleToggleSwitchChange, onAddClick }) {
   const currentDate = new Date().toLocaleString("en-US", {
     month: "long",
     day: "numeric",
@@ -30,7 +30,7 @@ function Header({ weatherData, currentTemperatureUnit, handleToggleSwitchChange 
           currentTemperatureUnit={currentTemperatureUnit}
           handleToggleSwitchChange={handleToggleSwitchChange}
         />
-        <button className="header__add-clothes-btn">+ Add clothes</button>
+        <button className="header__add-clothes-btn" onClick={onAddClick}>+ Add clothes</button>
         <p className="header__username">Terrence Tegegne</p>
         <img
           src={avatarTrue}

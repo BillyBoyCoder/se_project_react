@@ -70,6 +70,9 @@ se_project_react/
     │   ├── ModalWithForm/
     │   │   ├── ModalWithForm.css
     │   │   └── ModalWithForm.jsx
+    │   ├── NewGarment/
+    │   │   ├── NewGarment.css
+    │   │   └── NewGarment.jsx
     │   ├── ItemModal/
     │   │   ├── ItemModal.css
     │   │   └── ItemModal.jsx
