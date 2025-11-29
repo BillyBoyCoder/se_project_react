@@ -5,6 +5,7 @@
   max-width: 440px;
   padding: 28px;
   box-sizing: border-box;
+  background-color: #FFFFFF;
 }
 
 .modal__content_type_new-garment .modal__title {
@@ -24,7 +25,7 @@
 
 .modal__content_type_new-garment .modal__input {
   width: 100%;
-  margin: 0 0 24px 0;
+  margin: 0 0 8px 0;
   padding: 0;
   padding-bottom: 8px;
   font-family: "Cabinet Grotesk", "Helvetica Neue", Arial, sans-serif;
@@ -35,10 +36,26 @@
   border-bottom: 1px solid #000000;
   outline: none;
   box-sizing: border-box;
+  transition: border-color 0.3s ease;
 }
 
 .modal__content_type_new-garment .modal__input::placeholder {
   color: rgba(0, 0, 0, 0.5);
+}
+
+.modal__content_type_new-garment .modal__input_error {
+  border-bottom: 1px solid #FF0000;
+}
+
+.modal__content_type_new-garment .modal__error {
+  display: block;
+  margin: 0 0 16px 0;
+  font-family: "Cabinet Grotesk", "Helvetica Neue", Arial, sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 15px;
+  color: #FF0000;
+  text-align: left;
 }
 
 .modal__fieldset {
@@ -96,4 +113,76 @@
   line-height: 20px;
   color: #FFFFFF;
   cursor: pointer;
+  transition: opacity 0.3s ease, background-color 0.3s ease;
+}
+
+.modal__content_type_new-garment .modal__submit-btn:hover {
+  opacity: 0.8;
+}
+
+.modal__content_type_new-garment .modal__submit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* When form is valid, button becomes more opaque */
+.modal__content_type_new-garment .modal__submit-btn:not(:disabled) {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.modal__content_type_new-garment .modal__submit-btn:not(:disabled):hover {
+  background-color: #000000;
+  opacity: 1;
+}
+
+/* Tablet and Mobile styles */
+@media screen and (max-width: 768px) {
+  .modal__content_type_new-garment {
+    max-width: 90%;
+    padding: 20px;
+  }
+
+  .modal__content_type_new-garment .modal__label,
+  .modal__legend {
+    font-size: 14px;
+  }
+
+  .modal__content_type_new-garment .modal__input,
+  .modal__radio-label {
+    font-size: 14px;
+  }
+
+  .modal__content_type_new-garment .modal__submit-btn {
+    font-size: 14px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .modal__content_type_new-garment {
+    max-width: 95%;
+    padding: 16px;
+  }
+
+  .modal__content_type_new-garment .modal__title {
+    font-size: 18px;
+  }
+
+  .modal__content_type_new-garment .modal__label,
+  .modal__legend {
+    font-size: 12px;
+  }
+
+  .modal__content_type_new-garment .modal__input,
+  .modal__radio-label {
+    font-size: 12px;
+  }
+
+  .modal__fieldset {
+    margin: 0 0 24px 0;
+  }
+
+  .modal__content_type_new-garment .modal__submit-btn {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
 }

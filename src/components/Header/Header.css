@@ -65,6 +65,13 @@
   background-color: rgba(0, 0, 0, 0.05);
 }
 
+.header__profile-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+
 .header__username {
   margin: 0;
   font-family: "Cabinet Grotesk", "Helvetica Neue", Arial, sans-serif;
@@ -82,4 +89,72 @@
   height: 40px;
   border: 1px solid rgba(0, 0, 0, 0.5);
   border-radius: 50%;
+}
+
+/* Tablet styles */
+@media screen and (max-width: 768px) {
+  .header {
+    padding: 16px;
+  }
+
+  .header__side-left {
+    gap: 16px;
+  }
+
+  .header__side-right {
+    gap: 12px;
+  }
+
+  .header__add-clothes-btn {
+    font-size: 18px;
+    padding: 8px 16px;
+  }
+
+  .header__username {
+    font-size: 18px;
+  }
+}
+
+/* Mobile styles */
+@media screen and (max-width: 480px) {
+  .header {
+    padding: 12px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .header__side-left {
+    gap: 12px;
+    flex: 1;
+  }
+
+  .header__side-right {
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .header__logo {
+    width: 65px;
+    height: 30px;
+  }
+
+  .header__place {
+    font-size: 14px;
+    line-height: 18px;
+  }
+
+  .header__add-clothes-btn {
+    font-size: 14px;
+    padding: 6px 12px;
+  }
+
+  .header__username {
+    display: none;
+  }
+
+  .header__avatar {
+    width: 32px;
+    height: 32px;
+  }
 }

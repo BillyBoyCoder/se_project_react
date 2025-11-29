@@ -1,30 +1,93 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './NewGarment.css';
 import { getWeatherCondition } from '../../utils/weatherUtils';
+import { useForm } from '../../hooks/useForm';
 
-function NewGarment({ isOpen, onClose, onAddItem, weatherData }) {
+function NewGarment({ isOpen, onClose, onAddItem, onUpdateItem, weatherData, itemToEdit }) {
   // Get the default weather condition based on current temperature
   const defaultWeather = getWeatherCondition(weatherData.temp.F);
   const [selectedWeather, setSelectedWeather] = useState(defaultWeather);
+  const [errors, setErrors] = useState({ name: '', imageUrl: '' });
+  const { values: formValues, handleChange, setValues: setFormValues } = useForm({ name: '', imageUrl: '' });
+  const nameInputRef = useRef(null);
+  const imageUrlInputRef = useRef(null);
+  const isEditMode = Boolean(itemToEdit);
 
   // Update selected weather when modal opens or weather changes
   useEffect(() => {
     if (isOpen) {
-      const currentWeather = getWeatherCondition(weatherData.temp.F);
-      setSelectedWeather(currentWeather);
-      console.log("Default weather for new garment:", currentWeather);
+      if (itemToEdit) {
+        // Edit mode - populate form with existing item data
+        setFormValues({ name: itemToEdit.name, imageUrl: itemToEdit.link });
+        setSelectedWeather(itemToEdit.weather);
+      } else {
+        // Add mode - use default weather and clear form
+        const currentWeather = getWeatherCondition(weatherData.temp.F);
+        setFormValues({ name: '', imageUrl: '' });
+        setSelectedWeather(currentWeather);
+      }
+      setErrors({ name: '', imageUrl: '' });
     }
-  }, [isOpen, weatherData.temp.F]);
+  }, [isOpen, weatherData.temp.F, itemToEdit]);
+
+  const validateUrl = (url) => {
+    try {
+      new URL(url);
+      return true;
+    } catch {
+      return false;
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
-    const newItem = {
-      name: formData.get('name'),
-      link: formData.get('imageUrl'),
+    const name = formData.get('name');
+    const imageUrl = formData.get('imageUrl');
+    
+    const newErrors = { name: '', imageUrl: '' };
+    let hasError = false;
+
+    // Validate name
+    if (!name || name.trim() === '') {
+      newErrors.name = 'Please enter a garment name';
+      hasError = true;
+    }
+
+    // Validate URL
+    if (!imageUrl || imageUrl.trim() === '') {
+      newErrors.imageUrl = 'Please enter an image URL';
+      hasError = true;
+    } else if (!validateUrl(imageUrl)) {
+      newErrors.imageUrl = 'Please enter a valid URL';
+      hasError = true;
+    }
+
+    if (hasError) {
+      setErrors(newErrors);
+      // Focus on the first field with an error
+      if (newErrors.name) {
+        nameInputRef.current?.focus();
+      } else if (newErrors.imageUrl) {
+        imageUrlInputRef.current?.focus();
+      }
+      return;
+    }
+
+    const itemData = {
+      name,
+      link: imageUrl,
       weather: selectedWeather,
     };
-    onAddItem(newItem);
+    
+    if (isEditMode) {
+      onUpdateItem(itemToEdit._id, itemData);
+    } else {
+      onAddItem(itemData);
+    }
+    e.target.reset();
+    setFormValues({ name: '', imageUrl: '' });
+    setErrors({ name: '', imageUrl: '' });
   };
 
   return (
@@ -38,7 +101,7 @@ function NewGarment({ isOpen, onClose, onAddItem, weatherData }) {
         >
           ×
         </button>
-        <h2 className="modal__title">New garment</h2>
+        <h2 className="modal__title">{isEditMode ? 'Edit garment' : 'New garment'}</h2>
         <form className="modal__form" onSubmit={handleSubmit}>
           <label htmlFor="name" className="modal__label">
             Name
@@ -47,10 +110,13 @@ function NewGarment({ isOpen, onClose, onAddItem, weatherData }) {
             id="name"
             name="name"
             type="text"
-            className="modal__input"
+            className={`modal__input ${errors.name ? 'modal__input_error' : ''}`}
             placeholder="Name"
-            required
+            value={formValues.name}
+            onChange={handleChange}
+            ref={nameInputRef}
           />
+          {errors.name && <span className="modal__error">{errors.name}</span>}
           
           <label htmlFor="imageUrl" className="modal__label">
             Image
@@ -58,11 +124,14 @@ function NewGarment({ isOpen, onClose, onAddItem, weatherData }) {
           <input
             id="imageUrl"
             name="imageUrl"
-            type="url"
-            className="modal__input"
+            type="text"
+            className={`modal__input ${errors.imageUrl ? 'modal__input_error' : ''}`}
             placeholder="Image URL"
-            required
+            value={formValues.imageUrl}
+            onChange={handleChange}
+            ref={imageUrlInputRef}
           />
+          {errors.imageUrl && <span className="modal__error">{errors.imageUrl}</span>}
           
           <fieldset className="modal__fieldset">
             <legend className="modal__legend">Select the weather type:</legend>
@@ -75,7 +144,6 @@ function NewGarment({ isOpen, onClose, onAddItem, weatherData }) {
                   className="modal__radio-input"
                   checked={selectedWeather === 'hot'}
                   onChange={() => setSelectedWeather('hot')}
-                  required
                 />
                 Hot
               </label>
@@ -105,7 +173,7 @@ function NewGarment({ isOpen, onClose, onAddItem, weatherData }) {
           </fieldset>
           
           <button type="submit" className="modal__submit-btn">
-            Add garment
+            {isEditMode ? 'Save changes' : 'Add garment'}
           </button>
         </form>
       </div>

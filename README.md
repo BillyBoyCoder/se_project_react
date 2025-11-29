@@ -4,20 +4,47 @@
 
 Create a full-stack web application called "WTWR". This application will read weather data from a [Weather API](https://openweathermap.org/) and then recommend suitable clothing to the user based on that data. In this project, your objective is to create a front end for the application using the fundamental principles of React.
 
+## Video Pitch: WTWR React Routes - Sprint 11
+
+[View Video Pitch](https://drive.google.com/drive/folders/10MJeVvLkVELGmMRfRK0Yz-gqNR1B7fyx)
+
+## How to Run the Application
+
+This application uses a mock JSON server database to store clothing items. To run the application:
+
+1. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+2. **Start the JSON server (in one terminal):**
+   ```bash
+   npm run server
+   ```
+   This will start the mock API server on `http://localhost:3001`
+
+3. **Start the React development server (in another terminal):**
+   ```bash
+   npm run dev
+   ```
+   This will open the application in your default browser.
+
 ## Project Overview
 
-In this project, you'll focus on creating and styling the components that make up the frontend of the "WTWR" app. Here is an overview of the features you will implement by the end of this project iteration:
+In this project, you'll focus on creating and styling the components that make up the frontend of the "WTWR" app. Here is an overview of the features implemented:
 
-- A set of clothing cards, generated from a hard-coded array of data.
-- Temperature, location, and weather display components, styled with hard-coded content.
-- The new garment modal, which can be opened and closed.
-- The image modal will appear when a card is clicked.
+- Clothing cards retrieved from the mock database (db.json)
+- Temperature, location, and weather display using OpenWeatherMap API
+- Add new garment modal with form functionality
+- Delete item functionality
+- Item modal that appears when a card is clicked
+- Temperature unit toggle (Fahrenheit/Celsius)
+- Profile page with user's clothing items
 
-You will add additional functionality in future sprints.
-
-The Figma specs are linked at the top of this page. At this stage, you won't need to implement functionality for adding, liking, or deleting items or logging in; you'll simply add the "like" icon.
-
-Above the app frames, you'll find the UI Kit. It includes font styles and many basic components that will be reused throughout the "WTWR" app. You can refer back to it for an overview of the app's main components or to see the hover states of the buttons and other components.
+The application uses `db.json` as a mock database. All clothing items are:
+- Retrieved from db.json on page load
+- Added to db.json when creating new items
+- Deleted from db.json when removing items
 
 ## Project Structure
 
@@ -25,6 +52,7 @@ Above the app frames, you'll find the UI Kit. It includes font styles and many b
 se_project_react/
 ├── .eslintrc.cjs
 ├── .gitignore
+├── db.json                    # Mock database for clothing items
 ├── index.html
 ├── package.json
 ├── package-lock.json
@@ -56,40 +84,58 @@ se_project_react/
     │   ├── App/
     │   │   ├── App.css
     │   │   └── App.jsx
-    │   ├── Header/
-    │   │   ├── Header.css
-    │   │   └── Header.jsx
-    │   ├── Main/
-    │   │   ├── Main.css
-    │   │   └── Main.jsx
+    │   ├── ClothesSection/
+    │   │   ├── ClothesSection.css
+    │   │   └── ClothesSection.jsx
+    │   ├── Dashboard/
+    │   │   ├── Dashboard.css
+    │   │   └── Dashboard.jsx
+    │   ├── DeleteClothingItemModal/
+    │   │   ├── DeleteClothingItemModal.css
+    │   │   └── DeleteClothingItemModal.jsx
     │   ├── Footer/
     │   │   ├── Footer.css
     │   │   └── Footer.jsx
+    │   ├── Header/
+    │   │   ├── Header.css
+    │   │   └── Header.jsx
+    │   ├── ItemCard/
+    │   │   ├── ItemCard.css
+    │   │   └── ItemCard.jsx
+    │   ├── ItemModal/
+    │   │   ├── ItemModal.css
+    │   │   └── ItemModal.jsx
+    │   ├── Main/
+    │   │   ├── Main.css
+    │   │   └── Main.jsx
     │   ├── ModalWithForm/
     │   │   ├── ModalWithForm.css
     │   │   └── ModalWithForm.jsx
     │   ├── NewGarment/
     │   │   ├── NewGarment.css
     │   │   └── NewGarment.jsx
-    │   ├── ItemModal/
-    │   │   ├── ItemModal.css
-    │   │   └── ItemModal.jsx
-    │   ├── WeatherCard/
-    │   │   ├── WeatherCard.css
-    │   │   └── WeatherCard.jsx
-    │   ├── ItemCard/
-    │   │   ├── ItemCard.css
-    │   │   └── ItemCard.jsx
-    │   └── ToggleSwitch/
-    │       ├── ToggleSwitch.css
-    │       └── ToggleSwitch.jsx
+    │   ├── Profile/
+    │   │   ├── Profile.css
+    │   │   └── Profile.jsx
+    │   ├── SideBar/
+    │   │   ├── SideBar.css
+    │   │   └── SideBar.jsx
+    │   ├── ToggleSwitch/
+    │   │   ├── ToggleSwitch.css
+    │   │   └── ToggleSwitch.jsx
+    │   └── WeatherCard/
+    │       ├── WeatherCard.css
+    │       └── WeatherCard.jsx
+    ├── hooks/
+    │   └── useForm.js            # Custom hook for form state management
     ├── utils/
+    │   ├── api.js                # API functions for db.json CRUD operations
     │   ├── constants.js
     │   ├── contexts/
     │   │   └── CurrentTemperatureUnitContext.js
     │   ├── defaultClothing.js
-    │   ├── weatherApi.js
-    │   └── weatherUtils.js
+    │   ├── weatherApi.js         # OpenWeatherMap API integration
+    │   └── weatherUtils.js       # Weather condition logic
     └── vendor/
         ├── normalize.css
         └── fonts/

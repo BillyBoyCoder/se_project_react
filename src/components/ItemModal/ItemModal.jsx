@@ -1,12 +1,15 @@
 import "./ItemModal.css";
 
-function ItemModal({ isOpen, card, onClose }) {
+function ItemModal({ isOpen, card, onClose, onDeleteItem, onEditItem }) {
+  const handleDelete = () => {
+    onDeleteItem(card);
+  };
+
+  if (!card) return null;
+
   return (
-    // Apply the modifier class 'modal_is-opened' when isOpen is true
-    // This controls the modal's visibility via CSS
-    // We are using interpolation to dynamically write out the class name.
     <div className={`modal ${isOpen ? 'modal_is-opened' : ''}`} onClick={onClose}>
-      <div className="modal__content" onClick={(e) => e.stopPropagation()}> {/* Use stopPropagation to prevent closing when clicking inside modal */}
+      <div className="modal__content" onClick={(e) => e.stopPropagation()}>
         <button
           className="modal__close-btn"
           type="button"
@@ -15,16 +18,27 @@ function ItemModal({ isOpen, card, onClose }) {
         >
           ×
         </button>
-        {/* Only render card content if card exists */}
-        {card && (
-          <>
-            <img src={card.link} alt={card.name} className="modal__image" />
-            <div className="modal__footer">
-              <h2 className="modal__title">{card.name}</h2>
-              <p className="modal__weather">Weather: {card.weather}</p>
-            </div>
-          </>
-        )}
+        <img src={card.link} alt={card.name} className="modal__image" />
+        <div className="modal__footer">
+          <div className="modal__info">
+            <h2 className="modal__title">{card.name}</h2>
+            <p className="modal__weather">Weather: {card.weather}</p>
+          </div>
+          <button
+            className="modal__edit-btn"
+            type="button"
+            onClick={() => onEditItem && onEditItem(card)}
+          >
+            Edit item
+          </button>
+          <button
+            className="modal__delete-btn"
+            type="button"
+            onClick={handleDelete}
+          >
+            Delete item
+          </button>
+        </div>
       </div>
     </div>
   );

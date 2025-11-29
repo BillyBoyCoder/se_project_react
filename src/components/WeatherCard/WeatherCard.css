@@ -33,3 +33,37 @@
   line-height: 40px;
   color: #FFFFFF;
 }
+
+/* Tablet styles */
+@media screen and (max-width: 768px) {
+  .weather-card {
+    height: 60px;
+  }
+
+  .weather-card__image {
+    height: 60px;
+  }
+
+  .weather-card__temp {
+    left: 24px;
+    font-size: 28px;
+    line-height: 32px;
+  }
+}
+
+/* Mobile styles */
+@media screen and (max-width: 480px) {
+  .weather-card {
+    height: 50px;
+  }
+
+  .weather-card__image {
+    height: 50px;
+  }
+
+  .weather-card__temp {
+    left: 16px;
+    font-size: 22px;
+    line-height: 26px;
+  }
+}

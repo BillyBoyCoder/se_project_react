@@ -53,6 +53,14 @@
 .modal__footer {
   padding: 20px;
   background-color: #FFFFFF;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.modal__info {
+  flex: 1;
 }
 
 .modal__title {
@@ -71,4 +79,100 @@
   font-size: 16px;
   line-height: 20px;
   color: #000000;
+}
+
+.modal__edit-btn {
+  padding: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: "Cabinet Grotesk", "Helvetica Neue", Arial, sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 20px;
+  color: #0066CC;
+  white-space: nowrap;
+  transition: opacity 0.3s ease;
+}
+
+.modal__edit-btn:hover {
+  opacity: 0.6;
+}
+
+.modal__delete-btn {
+  padding: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: "Cabinet Grotesk", "Helvetica Neue", Arial, sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 20px;
+  color: #FF4D4D;
+  white-space: nowrap;
+  transition: opacity 0.3s ease;
+}
+
+.modal__delete-btn:hover {
+  opacity: 0.6;
+}
+
+/* Tablet and Mobile styles */
+@media screen and (max-width: 768px) {
+  .modal__content {
+    max-width: 90%;
+    width: 90%;
+  }
+
+  .modal__footer {
+    padding: 16px;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .modal__title {
+    font-size: 18px;
+  }
+
+  .modal__weather {
+    font-size: 14px;
+  }
+
+  .modal__delete-btn {
+    font-size: 14px;
+    align-self: flex-start;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .modal__content {
+    max-width: 95%;
+    width: 95%;
+  }
+
+  .modal__close-btn {
+    width: 24px;
+    height: 24px;
+    font-size: 24px;
+    top: 12px;
+    right: 12px;
+  }
+
+  .modal__footer {
+    padding: 12px;
+  }
+
+  .modal__title {
+    font-size: 16px;
+    line-height: 20px;
+  }
+
+  .modal__weather {
+    font-size: 12px;
+    line-height: 16px;
+  }
+
+  .modal__delete-btn {
+    font-size: 12px;
+  }
 }

@@ -25,3 +25,29 @@
   line-height: 20px;
   color: #000000;
 }
+
+/* Tablet styles */
+@media screen and (max-width: 768px) {
+  .footer {
+    padding: 16px;
+  }
+
+  .footer__author,
+  .footer__year {
+    font-size: 14px;
+  }
+}
+
+/* Mobile styles */
+@media screen and (max-width: 480px) {
+  .footer {
+    padding: 12px;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .footer__author,
+  .footer__year {
+    font-size: 12px;
+  }
+}

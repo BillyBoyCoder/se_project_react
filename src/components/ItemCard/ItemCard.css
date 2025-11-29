@@ -40,3 +40,33 @@
   position: relative;
   z-index: 1;
 }
+
+/* Tablet styles */
+@media screen and (max-width: 768px) {
+  .item-card {
+    width: 280px;
+    height: 290px;
+  }
+
+  .card__title {
+    font-size: 14px;
+    padding: 0 12px;
+  }
+}
+
+/* Mobile styles */
+@media screen and (max-width: 480px) {
+  .item-card {
+    width: 100%;
+    min-width: 150px;
+    height: 200px;
+  }
+
+  .card__title {
+    margin: 10px 0 0 0;
+    font-size: 12px;
+    padding: 0 8px;
+    line-height: 18px;
+    height: 18px;
+  }
+}

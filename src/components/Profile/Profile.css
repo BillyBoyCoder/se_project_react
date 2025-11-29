@@ -1,0 +1,25 @@
+.profile {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  padding: 20px;
+  max-width: 1360px;
+  margin: 0 auto;
+}
+
+/* Tablet styles */
+@media screen and (max-width: 768px) {
+  .profile {
+    flex-direction: column;
+    padding: 16px;
+    gap: 24px;
+  }
+}
+
+/* Mobile styles */
+@media screen and (max-width: 480px) {
+  .profile {
+    padding: 12px;
+    gap: 20px;
+  }
+}

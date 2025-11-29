@@ -1,81 +1,126 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
+import { Routes, Route } from "react-router-dom";
 import Header from "../Header/Header";
 import Main from "../Main/Main";
 import Footer from "../Footer/Footer";
 import ItemModal from "../ItemModal/ItemModal";
 import NewGarment from "../NewGarment/NewGarment";
-import { defaultClothingItems } from "../../utils/defaultClothing";
+import DeleteClothingItemModal from "../DeleteClothingItemModal/DeleteClothingItemModal";
+import Dashboard from "../Dashboard/Dashboard";
+import Profile from "../Profile/Profile";
 import { getWeather } from "../../utils/weatherApi";
 import { getWeatherCondition } from "../../utils/weatherUtils";
+import { getItems, addItem, updateItem, deleteItem } from "../../utils/api";
 import CurrentTemperatureUnitContext from "../../utils/contexts/CurrentTemperatureUnitContext";
 import "./App.css";
 
 function App() {
-  // State to hold an object of clothing items
+  const [allClothingItems, setAllClothingItems] = useState([]);
   const [clothingItems, setClothingItems] = useState([]);
-  // State to track which modal is currently active
-  // Empty string means no modal is open
   const [activeModal, setActiveModal] = useState("");
-  // State to track which card was clicked
   const [selectedCard, setSelectedCard] = useState(null);
-  // State to hold weather data
+  const [itemToDelete, setItemToDelete] = useState(null);
+  const [itemToEdit, setItemToEdit] = useState(null);
   const [weatherData, setWeatherData] = useState({ city: "", temp: { F: 0, C: 0 } });
-  // State to track current temperature unit (F or C)
   const [currentTemperatureUnit, setCurrentTemperatureUnit] = useState("F");
 
-  // Handler to toggle temperature unit
-  const handleToggleSwitchChange = () => {
-    setCurrentTemperatureUnit(currentTemperatureUnit === "F" ? "C" : "F");
-  };
+  const handleToggleSwitchChange = useCallback(() => {
+    setCurrentTemperatureUnit((current) => current === "F" ? "C" : "F");
+  }, []);
 
-  // Handler to open the item modal
-  // Sets activeModal to "active-modal" to display the modal
-  // Receives the card data and stores it in selectedCard state
-  function handleOpenItemModal(card) {
+  const handleOpenItemModal = useCallback((card) => {
     setActiveModal("active-modal");
     setSelectedCard(card);
-  }
+  }, []);
 
-  // Handler to open new garment modal
-  function handleOpenNewGarmentModal() {
+  const handleOpenNewGarmentModal = useCallback(() => {
     setActiveModal("new-garment");
-  }
+  }, []);
 
-  // Handler to add new item
-  function handleAddItem(newItem) {
-    const itemWithId = {
-      ...newItem,
-      _id: Date.now(), // Simple ID generation
+  const handleOpenDeleteModal = useCallback((item) => {
+    setItemToDelete(item);
+    setActiveModal("delete-confirmation");
+  }, []);
+
+  const handleOpenEditModal = useCallback((item) => {
+    setItemToEdit(item);
+    setActiveModal("edit-garment");
+  }, []);
+
+  const handleAddItem = useCallback((newItem) => {
+    const itemForApi = {
+      _id: Date.now(),
+      name: newItem.name,
+      weather: newItem.weather,
+      imageUrl: newItem.link,
     };
-    setClothingItems([...clothingItems, itemWithId]);
-    handleCloseModal();
-  }
+    
+    addItem(itemForApi)
+      .then((addedItem) => {
+        const itemForApp = { ...addedItem, link: addedItem.imageUrl };
+        setAllClothingItems((prevItems) => [itemForApp, ...prevItems]);
+        setActiveModal("");
+      })
+      .catch((error) => console.error("Error adding item:", error));
+  }, []);
 
-  // Handler to close any open modal
-  // Sets activeModal back to empty string
-  function handleCloseModal() {
+  const handleUpdateItem = useCallback((id, updates) => {
+    const updatesForApi = {
+      name: updates.name,
+      weather: updates.weather,
+      imageUrl: updates.link,
+    };
+    
+    updateItem(id, updatesForApi)
+      .then((updatedItem) => {
+        const itemForApp = { ...updatedItem, link: updatedItem.imageUrl };
+        setAllClothingItems((prevItems) => 
+          prevItems.map((item) => item._id === id ? itemForApp : item)
+        );
+        setActiveModal("");
+        setItemToEdit(null);
+        setSelectedCard(null);
+      })
+      .catch((error) => console.error("Error updating item:", error));
+  }, []);
+
+  const handleConfirmDelete = useCallback((item) => {
+    deleteItem(item._id)
+      .then(() => {
+        setAllClothingItems((prevItems) => prevItems.filter((card) => card._id !== item._id));
+        setActiveModal("");
+        setSelectedCard(null);
+        setItemToDelete(null);
+      })
+      .catch((error) => console.error("Error deleting item:", error));
+  }, []);
+
+  const handleCloseModal = useCallback(() => {
     setActiveModal("");
-  }
+  }, []);
 
-  // useEffect to fetch weather data when component mounts
   useEffect(() => {
     getWeather()
-      .then((data) => {
-        setWeatherData(data);
+      .then(setWeatherData)
+      .catch((error) => console.error("Error fetching weather data:", error));
+    
+    getItems()
+      .then((items) => {
+        const itemsWithLink = items.map((item) => ({ ...item, link: item.imageUrl }));
+        setAllClothingItems(itemsWithLink);
       })
-      .catch((error) => {
-        console.error("Error fetching weather data:", error);
-      });
-  }, []); // Empty dependency array means this runs once on mount
+      .catch((error) => console.error("Error fetching items:", error));
+  }, []);
 
-  // useEffect to filter clothing items based on weather condition
   useEffect(() => {
+    if (!weatherData.temp || !allClothingItems.length) return;
+    
     const weatherCondition = getWeatherCondition(weatherData.temp.F);
-    const filteredItems = defaultClothingItems.filter((item) => {
-      return item.weather.toLowerCase() === weatherCondition;
-    });
+    const filteredItems = allClothingItems.filter(
+      (item) => item.weather.toLowerCase() === weatherCondition
+    );
     setClothingItems(filteredItems);
-  }, [weatherData]);
+  }, [weatherData, allClothingItems]);
 
 
   return (
@@ -87,26 +132,46 @@ function App() {
         handleToggleSwitchChange={handleToggleSwitchChange}
         onAddClick={handleOpenNewGarmentModal}
       />
-      <Main
-        clothingItems={clothingItems}
-        handleOpenItemModal={handleOpenItemModal}
-        weatherData={weatherData}
-        currentTemperatureUnit={currentTemperatureUnit}
-      />
+      <Routes>
+        <Route path="/" element={
+          <Main
+            clothingItems={clothingItems}
+            handleOpenItemModal={handleOpenItemModal}
+            weatherData={weatherData}
+            currentTemperatureUnit={currentTemperatureUnit}
+            onAddClick={handleOpenNewGarmentModal}
+          />
+        } />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/profile" element={
+          <Profile 
+            clothingItems={allClothingItems}
+            handleOpenItemModal={handleOpenItemModal}
+            onAddClick={handleOpenNewGarmentModal}
+          />
+        } />
+      </Routes>
       <Footer />
-      {/* Render ItemModal and pass isOpen prop */}
-      {/* isOpen is true when activeModal equals "active-modal" */}
       <ItemModal
         isOpen={activeModal === "active-modal"}
         card={selectedCard}
         onClose={handleCloseModal}
+        onDeleteItem={handleOpenDeleteModal}
+        onEditItem={handleOpenEditModal}
       />
-      {/* Render NewGarment modal */}
+      <DeleteClothingItemModal
+        isOpen={activeModal === "delete-confirmation"}
+        onClose={handleCloseModal}
+        onConfirmDelete={handleConfirmDelete}
+        itemToDelete={itemToDelete}
+      />
       <NewGarment
-        isOpen={activeModal === "new-garment"}
+        isOpen={activeModal === "new-garment" || activeModal === "edit-garment"}
         onClose={handleCloseModal}
         onAddItem={handleAddItem}
+        onUpdateItem={handleUpdateItem}
         weatherData={weatherData}
+        itemToEdit={activeModal === "edit-garment" ? itemToEdit : null}
       />
     </div>
     </CurrentTemperatureUnitContext.Provider>
