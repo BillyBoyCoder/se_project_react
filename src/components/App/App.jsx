@@ -4,7 +4,7 @@ import Header from "../Header/Header";
 import Main from "../Main/Main";
 import Footer from "../Footer/Footer";
 import ItemModal from "../ItemModal/ItemModal";
-import NewGarment from "../NewGarment/NewGarment";
+import AddItemModal from "../AddItemModal/AddItemModal";
 import DeleteClothingItemModal from "../DeleteClothingItemModal/DeleteClothingItemModal";
 import Dashboard from "../Dashboard/Dashboard";
 import Profile from "../Profile/Profile";
@@ -33,8 +33,8 @@ function App() {
     setSelectedCard(card);
   }, []);
 
-  const handleOpenNewGarmentModal = useCallback(() => {
-    setActiveModal("new-garment");
+  const handleOpenAddItemModal = useCallback(() => {
+    setActiveModal("add-item");
   }, []);
 
   const handleOpenDeleteModal = useCallback((item) => {
@@ -44,7 +44,7 @@ function App() {
 
   const handleOpenEditModal = useCallback((item) => {
     setItemToEdit(item);
-    setActiveModal("edit-garment");
+    setActiveModal("edit-item");
   }, []);
 
   const handleAddItem = useCallback((newItem) => {
@@ -130,7 +130,7 @@ function App() {
         weatherData={weatherData} 
         currentTemperatureUnit={currentTemperatureUnit}
         handleToggleSwitchChange={handleToggleSwitchChange}
-        onAddClick={handleOpenNewGarmentModal}
+        onAddClick={handleOpenAddItemModal}
       />
       <Routes>
         <Route path="/" element={
@@ -139,7 +139,7 @@ function App() {
             handleOpenItemModal={handleOpenItemModal}
             weatherData={weatherData}
             currentTemperatureUnit={currentTemperatureUnit}
-            onAddClick={handleOpenNewGarmentModal}
+            onAddClick={handleOpenAddItemModal}
           />
         } />
         <Route path="/dashboard" element={<Dashboard />} />
@@ -147,7 +147,7 @@ function App() {
           <Profile 
             clothingItems={allClothingItems}
             handleOpenItemModal={handleOpenItemModal}
-            onAddClick={handleOpenNewGarmentModal}
+            onAddClick={handleOpenAddItemModal}
           />
         } />
       </Routes>
@@ -165,13 +165,13 @@ function App() {
         onConfirmDelete={handleConfirmDelete}
         itemToDelete={itemToDelete}
       />
-      <NewGarment
-        isOpen={activeModal === "new-garment" || activeModal === "edit-garment"}
+      <AddItemModal
+        isOpen={activeModal === "add-item" || activeModal === "edit-item"}
         onClose={handleCloseModal}
         onAddItem={handleAddItem}
         onUpdateItem={handleUpdateItem}
         weatherData={weatherData}
-        itemToEdit={activeModal === "edit-garment" ? itemToEdit : null}
+        itemToEdit={activeModal === "edit-item" ? itemToEdit : null}
       />
     </div>
     </CurrentTemperatureUnitContext.Provider>

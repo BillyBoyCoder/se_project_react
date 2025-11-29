@@ -111,9 +111,9 @@ se_project_react/
     │   ├── ModalWithForm/
     │   │   ├── ModalWithForm.css
     │   │   └── ModalWithForm.jsx
-    │   ├── NewGarment/
-    │   │   ├── NewGarment.css
-    │   │   └── NewGarment.jsx
+    │   ├── AddItemModal/
+    │   │   ├── AddItemModal.css
+    │   │   └── AddItemModal.jsx
     │   ├── Profile/
     │   │   ├── Profile.css
     │   │   └── Profile.jsx

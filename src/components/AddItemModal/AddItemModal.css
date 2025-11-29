@@ -1,18 +1,18 @@
 /* Modal base styles are inherited from ModalWithForm.css */
-/* This file contains NewGarment-specific overrides and additions */
+/* This file contains AddItemModal-specific overrides and additions */
 
-.modal__content_type_new-garment {
+.modal__content_type_add-item {
   max-width: 440px;
   padding: 28px;
   box-sizing: border-box;
   background-color: #FFFFFF;
 }
 
-.modal__content_type_new-garment .modal__title {
+.modal__content_type_add-item .modal__title {
   text-align: left;
 }
 
-.modal__content_type_new-garment .modal__label {
+.modal__content_type_add-item .modal__label {
   display: block;
   margin: 0 0 8px 0;
   font-family: "Cabinet Grotesk", "Helvetica Neue", Arial, sans-serif;
@@ -23,7 +23,7 @@
   text-align: left;
 }
 
-.modal__content_type_new-garment .modal__input {
+.modal__content_type_add-item .modal__input {
   width: 100%;
   margin: 0 0 8px 0;
   padding: 0;
@@ -39,15 +39,15 @@
   transition: border-color 0.3s ease;
 }
 
-.modal__content_type_new-garment .modal__input::placeholder {
+.modal__content_type_add-item .modal__input::placeholder {
   color: rgba(0, 0, 0, 0.5);
 }
 
-.modal__content_type_new-garment .modal__input_error {
+.modal__content_type_add-item .modal__input_error {
   border-bottom: 1px solid #FF0000;
 }
 
-.modal__content_type_new-garment .modal__error {
+.modal__content_type_add-item .modal__error {
   display: block;
   margin: 0 0 16px 0;
   font-family: "Cabinet Grotesk", "Helvetica Neue", Arial, sans-serif;
@@ -101,7 +101,7 @@
   accent-color: #000000;
 }
 
-.modal__content_type_new-garment .modal__submit-btn {
+.modal__content_type_add-item .modal__submit-btn {
   align-self: flex-start;
   padding: 8px 16px;
   background-color: rgba(0, 0, 0, 0.3);
@@ -116,63 +116,63 @@
   transition: opacity 0.3s ease, background-color 0.3s ease;
 }
 
-.modal__content_type_new-garment .modal__submit-btn:hover {
+.modal__content_type_add-item .modal__submit-btn:hover {
   opacity: 0.8;
 }
 
-.modal__content_type_new-garment .modal__submit-btn:disabled {
+.modal__content_type_add-item .modal__submit-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
 /* When form is valid, button becomes more opaque */
-.modal__content_type_new-garment .modal__submit-btn:not(:disabled) {
+.modal__content_type_add-item .modal__submit-btn:not(:disabled) {
   background-color: rgba(0, 0, 0, 0.8);
 }
 
-.modal__content_type_new-garment .modal__submit-btn:not(:disabled):hover {
+.modal__content_type_add-item .modal__submit-btn:not(:disabled):hover {
   background-color: #000000;
   opacity: 1;
 }
 
 /* Tablet and Mobile styles */
 @media screen and (max-width: 768px) {
-  .modal__content_type_new-garment {
+  .modal__content_type_add-item {
     max-width: 90%;
     padding: 20px;
   }
 
-  .modal__content_type_new-garment .modal__label,
+  .modal__content_type_add-item .modal__label,
   .modal__legend {
     font-size: 14px;
   }
 
-  .modal__content_type_new-garment .modal__input,
+  .modal__content_type_add-item .modal__input,
   .modal__radio-label {
     font-size: 14px;
   }
 
-  .modal__content_type_new-garment .modal__submit-btn {
+  .modal__content_type_add-item .modal__submit-btn {
     font-size: 14px;
   }
 }
 
 @media screen and (max-width: 480px) {
-  .modal__content_type_new-garment {
+  .modal__content_type_add-item {
     max-width: 95%;
     padding: 16px;
   }
 
-  .modal__content_type_new-garment .modal__title {
+  .modal__content_type_add-item .modal__title {
     font-size: 18px;
   }
 
-  .modal__content_type_new-garment .modal__label,
+  .modal__content_type_add-item .modal__label,
   .modal__legend {
     font-size: 12px;
   }
 
-  .modal__content_type_new-garment .modal__input,
+  .modal__content_type_add-item .modal__input,
   .modal__radio-label {
     font-size: 12px;
   }
@@ -181,7 +181,7 @@
     margin: 0 0 24px 0;
   }
 
-  .modal__content_type_new-garment .modal__submit-btn {
+  .modal__content_type_add-item .modal__submit-btn {
     font-size: 12px;
     padding: 6px 12px;
   }

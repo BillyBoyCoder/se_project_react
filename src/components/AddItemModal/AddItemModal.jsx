@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
-import './NewGarment.css';
+import './AddItemModal.css';
 import { getWeatherCondition } from '../../utils/weatherUtils';
 import { useForm } from '../../hooks/useForm';
 
-function NewGarment({ isOpen, onClose, onAddItem, onUpdateItem, weatherData, itemToEdit }) {
+function AddItemModal({ isOpen, onClose, onAddItem, onUpdateItem, weatherData, itemToEdit }) {
   // Get the default weather condition based on current temperature
   const defaultWeather = getWeatherCondition(weatherData.temp.F);
   const [selectedWeather, setSelectedWeather] = useState(defaultWeather);
@@ -92,7 +92,7 @@ function NewGarment({ isOpen, onClose, onAddItem, onUpdateItem, weatherData, ite
 
   return (
     <div className={`modal ${isOpen ? 'modal_is-opened' : ''}`} onClick={onClose}>
-      <div className="modal__content modal__content_type_new-garment" onClick={(e) => e.stopPropagation()}>
+      <div className="modal__content modal__content_type_add-item" onClick={(e) => e.stopPropagation()}>
         <button
           className="modal__close-btn"
           type="button"
@@ -181,4 +181,4 @@ function NewGarment({ isOpen, onClose, onAddItem, onUpdateItem, weatherData, ite
   );
 }
 
-export default NewGarment;
+export default AddItemModal;
