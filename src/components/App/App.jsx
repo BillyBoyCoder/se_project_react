@@ -21,11 +21,14 @@ function App() {
   const [selectedCard, setSelectedCard] = useState(null);
   const [itemToDelete, setItemToDelete] = useState(null);
   const [itemToEdit, setItemToEdit] = useState(null);
-  const [weatherData, setWeatherData] = useState({ city: "", temp: { F: 0, C: 0 } });
+  const [weatherData, setWeatherData] = useState({
+    city: "",
+    temp: { F: 0, C: 0 },
+  });
   const [currentTemperatureUnit, setCurrentTemperatureUnit] = useState("F");
 
   const handleToggleSwitchChange = useCallback(() => {
-    setCurrentTemperatureUnit((current) => current === "F" ? "C" : "F");
+    setCurrentTemperatureUnit((current) => (current === "F" ? "C" : "F"));
   }, []);
 
   const handleOpenItemModal = useCallback((card) => {
@@ -54,7 +57,7 @@ function App() {
       weather: newItem.weather,
       imageUrl: newItem.link,
     };
-    
+
     addItem(itemForApi)
       .then((addedItem) => {
         const itemForApp = { ...addedItem, link: addedItem.imageUrl };
@@ -70,12 +73,12 @@ function App() {
       weather: updates.weather,
       imageUrl: updates.link,
     };
-    
+
     updateItem(id, updatesForApi)
       .then((updatedItem) => {
         const itemForApp = { ...updatedItem, link: updatedItem.imageUrl };
-        setAllClothingItems((prevItems) => 
-          prevItems.map((item) => item._id === id ? itemForApp : item)
+        setAllClothingItems((prevItems) =>
+          prevItems.map((item) => (item._id === id ? itemForApp : item))
         );
         setActiveModal("");
         setItemToEdit(null);
@@ -87,7 +90,9 @@ function App() {
   const handleConfirmDelete = useCallback((item) => {
     deleteItem(item._id)
       .then(() => {
-        setAllClothingItems((prevItems) => prevItems.filter((card) => card._id !== item._id));
+        setAllClothingItems((prevItems) =>
+          prevItems.filter((card) => card._id !== item._id)
+        );
         setActiveModal("");
         setSelectedCard(null);
         setItemToDelete(null);
@@ -100,13 +105,48 @@ function App() {
   }, []);
 
   useEffect(() => {
-    getWeather()
-      .then(setWeatherData)
-      .catch((error) => console.error("Error fetching weather data:", error));
-    
+    // Get user's location using Geolocation API
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          // Fetch weather data with user's coordinates
+          getWeather(latitude, longitude)
+            .then(setWeatherData)
+            .catch((error) =>
+              console.error("Error fetching weather data:", error)
+            );
+        },
+        (error) => {
+          console.error("Error getting user location:", error.message);
+          // Fallback to default location if geolocation fails
+          getWeather(32.78, -96.8)
+            .then(setWeatherData)
+            .catch((error) =>
+              console.error("Error fetching weather data:", error)
+            );
+        }
+      );
+    } else {
+      console.error("Geolocation is not supported by this browser.");
+      // Fallback to default location if geolocation not supported
+      /*
+      The coordinates for Dallas, Texas are approximately 32.78° North latitude and -96.8° West longitude. In a more precise format, this can be expressed as 32°46′53.40″ N, 96°47′51.72″ W. 
+Latitude: 32.78° N
+Longitude: -96.8° W
+More precise coordinates: 32°46′53.40″ N, 96°47′51.72″ W 
+      */
+      getWeather(32.78, -96.8)
+        .then(setWeatherData)
+        .catch((error) => console.error("Error fetching weather data:", error));
+    }
+
     getItems()
       .then((items) => {
-        const itemsWithLink = items.map((item) => ({ ...item, link: item.imageUrl }));
+        const itemsWithLink = items.map((item) => ({
+          ...item,
+          link: item.imageUrl,
+        }));
         setAllClothingItems(itemsWithLink);
       })
       .catch((error) => console.error("Error fetching items:", error));
@@ -114,7 +154,7 @@ function App() {
 
   useEffect(() => {
     if (!weatherData.temp || !allClothingItems.length) return;
-    
+
     const weatherCondition = getWeatherCondition(weatherData.temp.F);
     const filteredItems = allClothingItems.filter(
       (item) => item.weather.toLowerCase() === weatherCondition
@@ -122,58 +162,65 @@ function App() {
     setClothingItems(filteredItems);
   }, [weatherData, allClothingItems]);
 
-
   return (
-    <CurrentTemperatureUnitContext.Provider value={{ currentTemperatureUnit, setCurrentTemperatureUnit }}>
-    <div className="app">
-      <Header 
-        weatherData={weatherData} 
-        currentTemperatureUnit={currentTemperatureUnit}
-        handleToggleSwitchChange={handleToggleSwitchChange}
-        onAddClick={handleOpenAddItemModal}
-      />
-      <Routes>
-        <Route path="/" element={
-          <Main
-            clothingItems={clothingItems}
-            handleOpenItemModal={handleOpenItemModal}
-            weatherData={weatherData}
-            currentTemperatureUnit={currentTemperatureUnit}
-            onAddClick={handleOpenAddItemModal}
+    <CurrentTemperatureUnitContext.Provider
+      value={{ currentTemperatureUnit, setCurrentTemperatureUnit }}
+    >
+      <div className="app">
+        <Header
+          weatherData={weatherData}
+          currentTemperatureUnit={currentTemperatureUnit}
+          handleToggleSwitchChange={handleToggleSwitchChange}
+          onAddClick={handleOpenAddItemModal}
+        />
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <Main
+                clothingItems={clothingItems}
+                handleOpenItemModal={handleOpenItemModal}
+                weatherData={weatherData}
+                currentTemperatureUnit={currentTemperatureUnit}
+                onAddClick={handleOpenAddItemModal}
+              />
+            }
           />
-        } />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/profile" element={
-          <Profile 
-            clothingItems={allClothingItems}
-            handleOpenItemModal={handleOpenItemModal}
-            onAddClick={handleOpenAddItemModal}
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route
+            path="/profile"
+            element={
+              <Profile
+                clothingItems={allClothingItems}
+                handleOpenItemModal={handleOpenItemModal}
+                onAddClick={handleOpenAddItemModal}
+              />
+            }
           />
-        } />
-      </Routes>
-      <Footer />
-      <ItemModal
-        isOpen={activeModal === "active-modal"}
-        card={selectedCard}
-        onClose={handleCloseModal}
-        onDeleteItem={handleOpenDeleteModal}
-        onEditItem={handleOpenEditModal}
-      />
-      <DeleteClothingItemModal
-        isOpen={activeModal === "delete-confirmation"}
-        onClose={handleCloseModal}
-        onConfirmDelete={handleConfirmDelete}
-        itemToDelete={itemToDelete}
-      />
-      <AddItemModal
-        isOpen={activeModal === "add-item" || activeModal === "edit-item"}
-        onClose={handleCloseModal}
-        onAddItem={handleAddItem}
-        onUpdateItem={handleUpdateItem}
-        weatherData={weatherData}
-        itemToEdit={activeModal === "edit-item" ? itemToEdit : null}
-      />
-    </div>
+        </Routes>
+        <Footer />
+        <ItemModal
+          isOpen={activeModal === "active-modal"}
+          card={selectedCard}
+          onClose={handleCloseModal}
+          onDeleteItem={handleOpenDeleteModal}
+          onEditItem={handleOpenEditModal}
+        />
+        <DeleteClothingItemModal
+          isOpen={activeModal === "delete-confirmation"}
+          onClose={handleCloseModal}
+          onConfirmDelete={handleConfirmDelete}
+          itemToDelete={itemToDelete}
+        />
+        <AddItemModal
+          isOpen={activeModal === "add-item" || activeModal === "edit-item"}
+          onClose={handleCloseModal}
+          onAddItem={handleAddItem}
+          onUpdateItem={handleUpdateItem}
+          weatherData={weatherData}
+          itemToEdit={activeModal === "edit-item" ? itemToEdit : null}
+        />
+      </div>
     </CurrentTemperatureUnitContext.Provider>
   );
 }

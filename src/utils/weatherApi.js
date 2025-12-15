@@ -1,6 +1,6 @@
 // Weather API functions for the WTWR application
 
-import { coordinates, apiKey } from "./constants";
+import { apiKey } from "./constants";
 
 // Base URL for OpenWeatherMap API
 const baseUrl = "https://api.openweathermap.org/data/2.5/weather";
@@ -25,8 +25,8 @@ const parseWeatherData = (data) => {
 };
 
 // Function to get weather data by coordinates
-export const getWeather = () => {
-  const url = `${baseUrl}?lat=${coordinates.lat}&lon=${coordinates.lon}&units=imperial&appid=${apiKey}`;
+export const getWeather = (latitude, longitude) => {
+  const url = `${baseUrl}?lat=${latitude}&lon=${longitude}&units=imperial&appid=${apiKey}`;
   
   return fetch(url)
     .then(checkResponse)
