@@ -1,24 +1,35 @@
 import ItemCard from '../ItemCard/ItemCard';
 import './ClothesSection.css';
 
-function ClothesSection({ clothingItems = [], handleOpenItemModal, onAddClick }) {
+function ClothesSection({ clothingItems = [], handleOpenItemModal, onAddClick, onCardLike, onDelete, isLoggedIn }) {
   return (
     <section className="clothes-section">
-      <div className="clothes-section__header">
-        <p className="clothes-section__title">Your items</p>
-        <button type="button" className="clothes-section__add-btn" onClick={onAddClick}>+ Add new</button>
-      </div>
-      <div className="clothes-section__cards">
-        {clothingItems.map((item) => {
-          return (
-            <ItemCard
-              key={item._id}
-              data={item}
-              onClick={handleOpenItemModal}
-            />
-          );
-        })}
-      </div>
+      {isLoggedIn && (
+        <div className="clothes-section__header">
+          <p className="clothes-section__title">Your items</p>
+          <button type="button" className="clothes-section__add-btn" onClick={onAddClick}>+ Add new</button>
+        </div>
+      )}
+      {isLoggedIn ? (
+        <div className="clothes-section__cards">
+          {clothingItems.map((item) => {
+            return (
+              <ItemCard
+                key={item._id}
+                data={item}
+                onClick={handleOpenItemModal}
+                onCardLike={onCardLike}
+                onDelete={onDelete}
+              />
+            );
+          })}
+        </div>
+      ) : (
+        <div className="clothes-section__login-message">
+          <p>Please log in to view clothing items</p>
+          <p>You can use the username: bobcat@wetestcode.com password: WeT3$tC0de</p>
+        </div>
+      )}
     </section>
   );
 }

@@ -1,20 +1,27 @@
 import { useState, useEffect, useCallback } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
+import confetti from 'canvas-confetti';
 import Header from "../Header/Header";
 import Main from "../Main/Main";
 import Footer from "../Footer/Footer";
 import ItemModal from "../ItemModal/ItemModal";
 import AddItemModal from "../AddItemModal/AddItemModal";
 import DeleteClothingItemModal from "../DeleteClothingItemModal/DeleteClothingItemModal";
+import RegisterModal from "../RegisterModal/RegisterModal";
+import LoginModal from "../LoginModal/LoginModal";
+import EditProfileModal from "../EditProfileModal/EditProfileModal";
+import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 import Dashboard from "../Dashboard/Dashboard";
 import Profile from "../Profile/Profile";
 import { getWeather } from "../../utils/weatherApi";
 import { getWeatherCondition } from "../../utils/weatherUtils";
-import { getItems, addItem, updateItem, deleteItem } from "../../utils/api";
+import { getItems, addItem, updateItem, deleteItem, signup, signin, getCurrentUser, updateUser, likeItem, unlikeItem } from "../../utils/api";
 import CurrentTemperatureUnitContext from "../../utils/contexts/CurrentTemperatureUnitContext";
+import CurrentUserContext from "../../utils/contexts/CurrentUserContext";
 import "./App.css";
 
 function App() {
+  const navigate = useNavigate();
   const [allClothingItems, setAllClothingItems] = useState([]);
   const [clothingItems, setClothingItems] = useState([]);
   const [activeModal, setActiveModal] = useState("");
@@ -26,6 +33,8 @@ function App() {
     temp: { F: 0, C: 0 },
   });
   const [currentTemperatureUnit, setCurrentTemperatureUnit] = useState("F");
+  const [currentUser, setCurrentUser] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const handleToggleSwitchChange = useCallback(() => {
     setCurrentTemperatureUnit((current) => (current === "F" ? "C" : "F"));
@@ -48,6 +57,18 @@ function App() {
   const handleOpenEditModal = useCallback((item) => {
     setItemToEdit(item);
     setActiveModal("edit-item");
+  }, []);
+
+  const handleOpenRegisterModal = useCallback(() => {
+    setActiveModal("register");
+  }, []);
+
+  const handleOpenLoginModal = useCallback(() => {
+    setActiveModal("login");
+  }, []);
+
+  const handleOpenEditProfileModal = useCallback(() => {
+    setActiveModal("edit-profile");
   }, []);
 
   const handleAddItem = useCallback((newItem) => {
@@ -97,14 +118,127 @@ function App() {
         setSelectedCard(null);
         setItemToDelete(null);
       })
-      .catch((error) => console.error("Error deleting item:", error));
+      .catch((error) => {
+        console.error("Error deleting item:", error);
+        alert(`Failed to delete item: ${error.message}`);
+      });
   }, []);
 
   const handleCloseModal = useCallback(() => {
     setActiveModal("");
   }, []);
 
+  const handleSignup = useCallback(({ email, password, name, avatar }, onError) => {
+    signup({ email, password, name, avatar })
+      .then(() => {
+        // Auto sign-in after registration
+        return signin({ email, password });
+      })
+      .then((data) => {
+        localStorage.setItem('jwt', data.token);
+        setIsLoggedIn(true);
+        return getCurrentUser();
+      })
+      .then((user) => {
+        setCurrentUser(user);
+        setActiveModal("");
+      })
+      .catch((error) => {
+        console.error("Error during signup:", error);
+        if (onError) {
+          onError(error);
+        }
+      });
+  }, []);
+
+  const handleLogin = useCallback(({ email, password }, onError) => {
+    signin({ email, password })
+      .then((data) => {
+        localStorage.setItem('jwt', data.token);
+        setIsLoggedIn(true);
+        return getCurrentUser();
+      })
+      .then((user) => {
+        setCurrentUser(user);
+        setActiveModal("");
+      })
+      .catch((error) => {
+        console.error("Error during login:", error);
+        if (onError) {
+          onError(error);
+        }
+      });
+  }, []);
+
+  const handleLogout = useCallback(() => {
+    localStorage.removeItem('jwt');
+    setIsLoggedIn(false);
+    setCurrentUser(null);
+    navigate('/');
+  }, [navigate]);
+
+  const handleUpdateProfile = useCallback(({ name, avatar }, onError) => {
+    updateUser({ name, avatar })
+      .then((updatedUser) => {
+        setCurrentUser(updatedUser);
+        // Trigger confetti
+        confetti({
+          particleCount: 100,
+          spread: 70,
+          origin: { y: 0.6 }
+        });
+        // Close modal after a short delay
+        setTimeout(() => {
+          setActiveModal("");
+        }, 1000);
+      })
+      .catch((error) => {
+        console.error("Error updating profile:", error);
+        if (onError) {
+          onError(error);
+        }
+      });
+  }, []);
+
+  const handleCardLike = useCallback((itemId, isLiked) => {
+    const apiCall = isLiked ? unlikeItem(itemId) : likeItem(itemId);
+    
+    apiCall
+      .then((updatedItem) => {
+        setAllClothingItems((prevItems) =>
+          prevItems.map((item) => 
+            item._id === itemId ? { ...updatedItem, link: updatedItem.imageUrl } : item
+          )
+        );
+      })
+      .catch((error) => console.error("Error toggling like:", error));
+  }, []);
+
+  const handleSwitchToLogin = useCallback(() => {
+    setActiveModal("login");
+  }, []);
+
+  const handleSwitchToRegister = useCallback(() => {
+    setActiveModal("register");
+  }, []);
+
   useEffect(() => {
+    // Check if user is already logged in
+    const token = localStorage.getItem('jwt');
+    if (token) {
+      getCurrentUser()
+        .then((user) => {
+          setCurrentUser(user);
+          setIsLoggedIn(true);
+        })
+        .catch((error) => {
+          console.error("Error verifying token:", error);
+          localStorage.removeItem('jwt');
+          setIsLoggedIn(false);
+          setCurrentUser(null);
+        });
+    }
+
     // Get user's location using Geolocation API
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -166,13 +300,17 @@ More precise coordinates: 32°46′53.40″ N, 96°47′51.72″ W
     <CurrentTemperatureUnitContext.Provider
       value={{ currentTemperatureUnit, setCurrentTemperatureUnit }}
     >
-      <div className="app">
-        <Header
-          weatherData={weatherData}
-          currentTemperatureUnit={currentTemperatureUnit}
-          handleToggleSwitchChange={handleToggleSwitchChange}
-          onAddClick={handleOpenAddItemModal}
-        />
+      <CurrentUserContext.Provider value={{ currentUser, isLoggedIn }}>
+        <div className="app">
+          <Header
+            weatherData={weatherData}
+            currentTemperatureUnit={currentTemperatureUnit}
+            handleToggleSwitchChange={handleToggleSwitchChange}
+            onAddClick={handleOpenAddItemModal}
+            onSignupClick={handleOpenRegisterModal}
+            onLoginClick={handleOpenLoginModal}
+            onLogout={handleLogout}
+          />
         <Routes>
           <Route
             path="/"
@@ -183,6 +321,9 @@ More precise coordinates: 32°46′53.40″ N, 96°47′51.72″ W
                 weatherData={weatherData}
                 currentTemperatureUnit={currentTemperatureUnit}
                 onAddClick={handleOpenAddItemModal}
+                onCardLike={handleCardLike}
+                onDelete={handleOpenDeleteModal}
+                isLoggedIn={isLoggedIn}
               />
             }
           />
@@ -190,11 +331,18 @@ More precise coordinates: 32°46′53.40″ N, 96°47′51.72″ W
           <Route
             path="/profile"
             element={
-              <Profile
-                clothingItems={allClothingItems}
-                handleOpenItemModal={handleOpenItemModal}
-                onAddClick={handleOpenAddItemModal}
-              />
+              <ProtectedRoute>
+                <Profile
+                  clothingItems={allClothingItems}
+                  handleOpenItemModal={handleOpenItemModal}
+                  onAddClick={handleOpenAddItemModal}
+                  onCardLike={handleCardLike}
+                  onDelete={handleOpenDeleteModal}
+                  isLoggedIn={isLoggedIn}
+                  onEditProfile={handleOpenEditProfileModal}
+                  onLogout={handleLogout}
+                />
+              </ProtectedRoute>
             }
           />
         </Routes>
@@ -220,7 +368,26 @@ More precise coordinates: 32°46′53.40″ N, 96°47′51.72″ W
           weatherData={weatherData}
           itemToEdit={activeModal === "edit-item" ? itemToEdit : null}
         />
+        <RegisterModal
+          isOpen={activeModal === "register"}
+          onClose={handleCloseModal}
+          onSignup={handleSignup}
+          onSwitchToLogin={handleSwitchToLogin}
+        />
+        <LoginModal
+          isOpen={activeModal === "login"}
+          onClose={handleCloseModal}
+          onLogin={handleLogin}
+          onSwitchToRegister={handleSwitchToRegister}
+        />
+        <EditProfileModal
+          isOpen={activeModal === "edit-profile"}
+          onClose={handleCloseModal}
+          onUpdateProfile={handleUpdateProfile}
+          currentUser={currentUser}
+        />
       </div>
+      </CurrentUserContext.Provider>
     </CurrentTemperatureUnitContext.Provider>
   );
 }

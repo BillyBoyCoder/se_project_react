@@ -49,6 +49,16 @@
   justify-content: end;
 }
 
+.clothes-section__login-message {
+  width: 100%;
+  text-align: center;
+  font-family: "Cabinet Grotesk", "Helvetica Neue", Arial, sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #FF4D4D;
+  margin: 40px 0;
+}
+
 /* Tablet styles */
 @media screen and (max-width: 1024px) {
   .clothes-section {

@@ -1,14 +1,23 @@
 import { Link } from "react-router-dom";
+import { useContext } from "react";
 import logo from "../../assets/images/logo.svg";
 import avatarTrue from "../../assets/images/avatarTrue.svg";
 import ToggleSwitch from "../ToggleSwitch/ToggleSwitch";
+import CurrentUserContext from "../../utils/contexts/CurrentUserContext";
 import "./Header.css";
 
-function Header({ weatherData, currentTemperatureUnit, handleToggleSwitchChange, onAddClick }) {
+function Header({ weatherData, currentTemperatureUnit, handleToggleSwitchChange, onAddClick, onSignupClick, onLoginClick, onLogout }) {
+  const { currentUser, isLoggedIn } = useContext(CurrentUserContext);
+  
   const currentDate = new Date().toLocaleString("en-US", {
     month: "long",
     day: "numeric",
   });
+
+  // Get user's first initial for placeholder avatar
+  const getInitial = (name) => {
+    return name ? name.charAt(0).toUpperCase() : '?';
+  };
 
   return (
     <header className="header">
@@ -31,15 +40,31 @@ function Header({ weatherData, currentTemperatureUnit, handleToggleSwitchChange,
           currentTemperatureUnit={currentTemperatureUnit}
           handleToggleSwitchChange={handleToggleSwitchChange}
         />
-        <button className="header__add-clothes-btn" onClick={onAddClick}>+ Add clothes</button>
-        <Link to="/profile" className="header__profile-link">
-          <p className="header__username">Terrence Tegegne</p>
-          <img
-            src={avatarTrue}
-            alt="Terrence Tegegne's avatar"
-            className="header__avatar"
-          />
-        </Link>
+        {isLoggedIn ? (
+          <>
+            <button className="header__add-clothes-btn" onClick={onAddClick}>+ Add clothes</button>
+            <Link to="/profile" className="header__profile-link">
+              <p className="header__username">{currentUser?.name || 'User'}</p>
+              {currentUser?.avatar ? (
+                <img
+                  src={currentUser.avatar}
+                  alt={`${currentUser?.name}'s avatar`}
+                  className="header__avatar"
+                />
+              ) : (
+                <div className="header__avatar-placeholder">
+                  {getInitial(currentUser?.name)}
+                </div>
+              )}
+            </Link>
+            <button className="header__logout-btn" onClick={onLogout}>Log Out</button>
+          </>
+        ) : (
+          <>
+            <button className="header__auth-btn" onClick={onSignupClick}>Sign Up</button>
+            <button className="header__auth-btn" onClick={onLoginClick}>Log In</button>
+          </>
+        )}
       </div>
     </header>
   );

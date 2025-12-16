@@ -1,5 +1,9 @@
 # WTWR (What to Wear?)
 
+## Backend Repository
+
+The backend API for this project can be found here: [WTWR Backend Repository](https://github.com/BillyBoyCoder/se_project_express)
+
 ## Objective
 
 Create a full-stack web application called "WTWR". This application will read weather data from a [Weather API](https://openweathermap.org/) and then recommend suitable clothing to the user based on that data. In this project, your objective is to create a front end for the application using the fundamental principles of React.
