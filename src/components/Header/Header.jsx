@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
 import logo from "../../assets/images/logo.svg";
 import avatarTrue from "../../assets/images/avatarTrue.svg";
 import ToggleSwitch from "../ToggleSwitch/ToggleSwitch";
@@ -8,6 +8,12 @@ import "./Header.css";
 
 function Header({ weatherData, currentTemperatureUnit, handleToggleSwitchChange, onAddClick, onSignupClick, onLoginClick, onLogout }) {
   const { currentUser, isLoggedIn } = useContext(CurrentUserContext);
+  const [avatarError, setAvatarError] = useState(false);
+  
+  // Reset avatarError when the avatar URL changes
+  useEffect(() => {
+    setAvatarError(false);
+  }, [currentUser?.avatar]);
   
   const currentDate = new Date().toLocaleString("en-US", {
     month: "long",
@@ -17,6 +23,11 @@ function Header({ weatherData, currentTemperatureUnit, handleToggleSwitchChange,
   // Get user's first initial for placeholder avatar
   const getInitial = (name) => {
     return name ? name.charAt(0).toUpperCase() : '?';
+  };
+
+  // Handle avatar image load error
+  const handleAvatarError = () => {
+    setAvatarError(true);
   };
 
   return (
@@ -45,11 +56,12 @@ function Header({ weatherData, currentTemperatureUnit, handleToggleSwitchChange,
             <button className="header__add-clothes-btn" onClick={onAddClick}>+ Add clothes</button>
             <Link to="/profile" className="header__profile-link">
               <p className="header__username">{currentUser?.name || 'User'}</p>
-              {currentUser?.avatar ? (
+              {currentUser?.avatar && !avatarError ? (
                 <img
                   src={currentUser.avatar}
                   alt={`${currentUser?.name}'s avatar`}
                   className="header__avatar"
+                  onError={handleAvatarError}
                 />
               ) : (
                 <div className="header__avatar-placeholder">

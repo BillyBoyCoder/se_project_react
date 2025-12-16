@@ -15,11 +15,21 @@ const checkResponse = (res) => {
 
 // Function to parse weather data from API response
 const parseWeatherData = (data) => {
-  const parsedData = { temp: {} };
+  const parsedData = { temp: {}, condition: {} };
   
   parsedData.city = data.name;
   parsedData.temp.F = Math.round(data.main.temp);
-  parsedData.temp.C = Math.round((data.main.temp - 32) * (5 / 9)); 
+  parsedData.temp.C = Math.round((data.main.temp - 32) * (5 / 9));
+  
+  // Include weather condition data
+  if (data.weather && data.weather.length > 0) {
+    parsedData.condition = {
+      id: data.weather[0].id,
+      main: data.weather[0].main,
+      description: data.weather[0].description,
+      icon: data.weather[0].icon
+    };
+  }
   
   return parsedData;
 };

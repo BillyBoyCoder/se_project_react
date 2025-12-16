@@ -10,7 +10,11 @@ function Main({ clothingItems, handleOpenItemModal, weatherData, currentTemperat
 
   return (
     <main className="main">
-      <WeatherCard temp={displayTemp} currentTemperatureUnit={currentTemperatureUnit} />
+      <WeatherCard 
+        temp={displayTemp} 
+        currentTemperatureUnit={currentTemperatureUnit}
+        condition={weatherData.condition}
+      />
       <p className="main__text">Today is {displayTemp}° {currentTemperatureUnit} / You may want to wear:</p>
       <ClothesSection 
         clothingItems={clothingItems}

@@ -254,7 +254,7 @@ function App() {
         (error) => {
           console.error("Error getting user location:", error.message);
           // Fallback to default location if geolocation fails
-          getWeather(32.78, -96.8)
+          getWeather(59.5594, 150.8128)
             .then(setWeatherData)
             .catch((error) =>
               console.error("Error fetching weather data:", error)
@@ -265,12 +265,9 @@ function App() {
       console.error("Geolocation is not supported by this browser.");
       // Fallback to default location if geolocation not supported
       /*
-      The coordinates for Dallas, Texas are approximately 32.78° North latitude and -96.8° West longitude. In a more precise format, this can be expressed as 32°46′53.40″ N, 96°47′51.72″ W. 
-Latitude: 32.78° N
-Longitude: -96.8° W
-More precise coordinates: 32°46′53.40″ N, 96°47′51.72″ W 
+      Magadan, Russia are approximately 59.56° N latitude and 150.81° E longitude
       */
-      getWeather(32.78, -96.8)
+      getWeather(59.56, 150.81)
         .then(setWeatherData)
         .catch((error) => console.error("Error fetching weather data:", error));
     }

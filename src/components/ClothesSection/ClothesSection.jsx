@@ -27,7 +27,11 @@ function ClothesSection({ clothingItems = [], handleOpenItemModal, onAddClick, o
       ) : (
         <div className="clothes-section__login-message">
           <p>Please log in to view clothing items</p>
-          <p>You can use the username: bobcat@wetestcode.com password: WeT3$tC0de</p>
+          <p>If you're connecting to my database, you should be able to use:</p>
+          <p>username: bobcat@wetestcode.com password: WeT3$tC0de</p>
+          <p>If you want to test the weather card image functionality, I set the default values to use</p>
+          <p>Magadan, Russia are approximately 59.56° N latitude and 150.81° E longitude</p>
+          <p>And remember to block location in your browser so that it uses the default longitude and latitude.</p>
         </div>
       )}
     </section>
