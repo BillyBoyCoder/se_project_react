@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import '../RegisterModal/RegisterModal.css';
+import './EditProfileModal.css';
 import { useForm } from '../../hooks/useForm';
 
 function EditProfileModal({ isOpen, onClose, onUpdateProfile, currentUser }) {
