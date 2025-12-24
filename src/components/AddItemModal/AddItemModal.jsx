@@ -18,7 +18,7 @@ function AddItemModal({ isOpen, onClose, onAddItem, onUpdateItem, weatherData, i
     if (isOpen) {
       if (itemToEdit) {
         // Edit mode - populate form with existing item data
-        setFormValues({ name: itemToEdit.name, imageUrl: itemToEdit.link });
+        setFormValues({ name: itemToEdit.name, imageUrl: itemToEdit.imageUrl });
         setSelectedWeather(itemToEdit.weather);
       } else {
         // Add mode - use default weather and clear form

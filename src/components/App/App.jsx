@@ -76,13 +76,12 @@ function App() {
       _id: Date.now(),
       name: newItem.name,
       weather: newItem.weather,
-      imageUrl: newItem.link,
+      imageUrl: newItem.imageUrl,
     };
 
     try {
       const addedItem = await addItem(itemForApi);
-      const itemForApp = { ...addedItem, link: addedItem.imageUrl };
-      setAllClothingItems((prevItems) => [itemForApp, ...prevItems]);
+      setAllClothingItems((prevItems) => [addedItem, ...prevItems]);
       setActiveModal("");
     } catch (error) {
       console.error("Error adding item:", error);
@@ -93,14 +92,13 @@ function App() {
     const updatesForApi = {
       name: updates.name,
       weather: updates.weather,
-      imageUrl: updates.link,
+      imageUrl: updates.imageUrl,
     };
 
     try {
       const updatedItem = await updateItem(id, updatesForApi);
-      const itemForApp = { ...updatedItem, link: updatedItem.imageUrl };
       setAllClothingItems((prevItems) =>
-        prevItems.map((item) => (item._id === id ? itemForApp : item))
+        prevItems.map((item) => (item._id === id ? updatedItem : item))
       );
       setActiveModal("");
       setItemToEdit(null);

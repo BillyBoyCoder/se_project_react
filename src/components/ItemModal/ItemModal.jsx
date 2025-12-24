@@ -25,7 +25,7 @@ function ItemModal({ isOpen, card, onClose, onDeleteItem, onEditItem }) {
         >
           ×
         </button>
-        <img src={card.link} alt={card.name} className="modal__image" />
+        <img src={card.imageUrl} alt={card.name} className="modal__image" />
         <div className="modal__footer">
           <div className="modal__info">
             <h2 className="modal__title">{card.name}</h2>

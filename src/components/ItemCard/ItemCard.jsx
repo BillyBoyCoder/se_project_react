@@ -35,7 +35,7 @@ function ItemCard(props) {
           </button>
         )}
       </div>
-      <img src={props.data.link} alt={props.data.name} className="card__image" onClick={handleCardClick} />
+      <img src={props.data.imageUrl} alt={props.data.name} className="card__image" onClick={handleCardClick} />
     </div>
   );
 }
