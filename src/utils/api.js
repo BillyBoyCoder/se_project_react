@@ -1,4 +1,4 @@
-const baseUrl = 'http://34.75.99.67:3001';
+const baseUrl = 'https://api.wtwrguys.jumpingcrab.com';
 
 // Check response status
 function checkResponse(res) {
