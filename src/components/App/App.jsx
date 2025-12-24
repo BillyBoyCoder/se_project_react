@@ -234,11 +234,7 @@ function App() {
       // Fetch clothing items
       try {
         const items = await getItems();
-        const itemsWithLink = items.map((item) => ({
-          ...item,
-          link: item.imageUrl,
-        }));
-        setAllClothingItems(itemsWithLink);
+        setAllClothingItems(items);
       } catch (error) {
         console.error("Error fetching items:", error);
       }
