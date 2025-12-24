@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import '../ModalWithForm/ModalWithForm.css';
 import './RegisterModal.css';
 import { useForm } from '../../hooks/useForm';
 

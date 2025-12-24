@@ -1,3 +1,4 @@
+import '../ModalWithForm/ModalWithForm.css';
 import './DeleteClothingItemModal.css';
 
 function DeleteClothingItemModal({ isOpen, onClose, onConfirmDelete, itemToDelete }) {
