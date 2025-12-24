@@ -6,15 +6,17 @@ function checkResponse(res) {
     return res.json();
   }
   // Parse error message from response body
-  return res.json()
-    .then((errorData) => {
-      const message = errorData.message || `${res.status}: ${res.statusText}`;
-      return Promise.reject(new Error(message));
-    })
-    .catch(() => {
-      // If parsing fails, reject with status text
-      return Promise.reject(new Error(`${res.status}: ${res.statusText}`));
-    });
+  return res.json().then((errorData) => {
+    const message = errorData.message || `${res.status}: ${res.statusText}`;
+    throw new Error(message);
+  }).catch((err) => {
+    // If it's already our Error with the message, throw it
+    if (err.message && err.message !== 'Unexpected token' && !err.message.includes('JSON')) {
+      throw err;
+    }
+    // If JSON parsing failed, use status text
+    throw new Error(`${res.status}: ${res.statusText}`);
+  });
 }
 
 // Get all clothing items
