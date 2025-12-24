@@ -83,12 +83,21 @@ function EditProfileModal({ isOpen, onClose, onUpdateProfile, currentUser }) {
   };
 
   const isFormValid = () => {
-    return (
+    // Check if data is valid
+    const isDataValid = (
       validateName(formValues.name) &&
       (!formValues.avatar || formValues.avatar.trim() === '' || validateUrl(formValues.avatar)) &&
       !errors.name &&
       !errors.avatar
     );
+
+    // Check if data has changed from current user data
+    const hasChanged = currentUser && (
+      formValues.name !== currentUser.name ||
+      formValues.avatar.trim() !== (currentUser.avatar || '')
+    );
+
+    return isDataValid && hasChanged;
   };
 
   const handleSubmit = (e) => {
