@@ -76,7 +76,7 @@ function AddItemModal({ isOpen, onClose, onAddItem, onUpdateItem, weatherData, i
 
     const itemData = {
       name,
-      link: imageUrl,
+      imageUrl: imageUrl,
       weather: selectedWeather,
     };
     
