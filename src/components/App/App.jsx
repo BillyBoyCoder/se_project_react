@@ -73,7 +73,6 @@ function App() {
 
   const handleAddItem = useCallback(async (newItem) => {
     const itemForApi = {
-      _id: Date.now(),
       name: newItem.name,
       weather: newItem.weather,
       imageUrl: newItem.imageUrl,
