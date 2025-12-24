@@ -15,5 +15,16 @@
   display: flex;
 }
 
+.modal__content {
+  position: relative;
+  background-color: #FFFFFF;
+  border-radius: 16px;
+}
+
+.modal__content_type_auth {
+  background-color: #FFFFFF;
+  position: relative;
+}
+
 /* Inherits other styles from ModalWithForm.css and RegisterModal.css */
 /* Additional specific styles can be added here if needed */

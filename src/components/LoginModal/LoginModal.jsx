@@ -119,8 +119,8 @@ function LoginModal({ isOpen, onClose, onLogin, onSwitchToRegister }) {
   };
 
   return (
-    <div className={`modal ${isOpen ? 'modal_is-opened' : ''}`} onClick={onClose}>
-      <div className="modal__content modal__content_type_auth" onClick={(e) => e.stopPropagation()}>
+    <div className={`modal ${isOpen ? 'modal_is-opened' : ''}`}>
+      <div className="modal__content modal__content_type_auth">
         <button
           className="modal__close-btn"
           type="button"

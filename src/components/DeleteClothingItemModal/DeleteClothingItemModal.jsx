@@ -8,8 +8,8 @@ function DeleteClothingItemModal({ isOpen, onClose, onConfirmDelete, itemToDelet
   };
 
   return (
-    <div className={`modal ${isOpen ? 'modal_is-opened' : ''}`} onClick={onClose}>
-      <div className="modal__content modal__content_type_delete-confirmation" onClick={(e) => e.stopPropagation()}>
+    <div className={`modal ${isOpen ? 'modal_is-opened' : ''}`}>
+      <div className="modal__content modal__content_type_delete-confirmation">
         <button
           className="modal__close-btn"
           type="button"

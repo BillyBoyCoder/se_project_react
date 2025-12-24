@@ -125,17 +125,11 @@ function EditProfileModal({ isOpen, onClose, onUpdateProfile, currentUser }) {
     );
   };
 
-  const handleOverlayClick = (e) => {
-    if (e.target === e.currentTarget) {
-      onClose();
-    }
-  };
-
   if (!isOpen) return null;
 
   return (
-    <div className={`modal ${isOpen ? 'modal_is-opened' : ''}`} onClick={handleOverlayClick}>
-      <div className="modal__content modal__content_type_auth" onClick={(e) => e.stopPropagation()}>
+    <div className={`modal ${isOpen ? 'modal_is-opened' : ''}`}>
+      <div className="modal__content modal__content_type_auth">
         <button
           type="button"
           className="modal__close-btn"
