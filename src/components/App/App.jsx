@@ -71,7 +71,7 @@ function App() {
     setActiveModal("edit-profile");
   }, []);
 
-  const handleAddItem = useCallback((newItem) => {
+  const handleAddItem = useCallback(async (newItem) => {
     const itemForApi = {
       _id: Date.now(),
       name: newItem.name,
@@ -79,95 +79,88 @@ function App() {
       imageUrl: newItem.link,
     };
 
-    addItem(itemForApi)
-      .then((addedItem) => {
-        const itemForApp = { ...addedItem, link: addedItem.imageUrl };
-        setAllClothingItems((prevItems) => [itemForApp, ...prevItems]);
-        setActiveModal("");
-      })
-      .catch((error) => console.error("Error adding item:", error));
+    try {
+      const addedItem = await addItem(itemForApi);
+      const itemForApp = { ...addedItem, link: addedItem.imageUrl };
+      setAllClothingItems((prevItems) => [itemForApp, ...prevItems]);
+      setActiveModal("");
+    } catch (error) {
+      console.error("Error adding item:", error);
+    }
   }, []);
 
-  const handleUpdateItem = useCallback((id, updates) => {
+  const handleUpdateItem = useCallback(async (id, updates) => {
     const updatesForApi = {
       name: updates.name,
       weather: updates.weather,
       imageUrl: updates.link,
     };
 
-    updateItem(id, updatesForApi)
-      .then((updatedItem) => {
-        const itemForApp = { ...updatedItem, link: updatedItem.imageUrl };
-        setAllClothingItems((prevItems) =>
-          prevItems.map((item) => (item._id === id ? itemForApp : item))
-        );
-        setActiveModal("");
-        setItemToEdit(null);
-        setSelectedCard(null);
-      })
-      .catch((error) => console.error("Error updating item:", error));
+    try {
+      const updatedItem = await updateItem(id, updatesForApi);
+      const itemForApp = { ...updatedItem, link: updatedItem.imageUrl };
+      setAllClothingItems((prevItems) =>
+        prevItems.map((item) => (item._id === id ? itemForApp : item))
+      );
+      setActiveModal("");
+      setItemToEdit(null);
+      setSelectedCard(null);
+    } catch (error) {
+      console.error("Error updating item:", error);
+    }
   }, []);
 
-  const handleConfirmDelete = useCallback((item) => {
-    deleteItem(item._id)
-      .then(() => {
-        setAllClothingItems((prevItems) =>
-          prevItems.filter((card) => card._id !== item._id)
-        );
-        setActiveModal("");
-        setSelectedCard(null);
-        setItemToDelete(null);
-      })
-      .catch((error) => {
-        console.error("Error deleting item:", error);
-        alert(`Failed to delete item: ${error.message}`);
-      });
+  const handleConfirmDelete = useCallback(async (item) => {
+    try {
+      await deleteItem(item._id);
+      setAllClothingItems((prevItems) =>
+        prevItems.filter((card) => card._id !== item._id)
+      );
+      setActiveModal("");
+      setSelectedCard(null);
+      setItemToDelete(null);
+    } catch (error) {
+      console.error("Error deleting item:", error);
+      alert(`Failed to delete item: ${error.message}`);
+    }
   }, []);
 
   const handleCloseModal = useCallback(() => {
     setActiveModal("");
   }, []);
 
-  const handleSignup = useCallback(({ email, password, name, avatar }, onError) => {
-    signup({ email, password, name, avatar })
-      .then(() => {
-        // Auto sign-in after registration
-        return signin({ email, password });
-      })
-      .then((data) => {
-        localStorage.setItem('jwt', data.token);
-        setIsLoggedIn(true);
-        return getCurrentUser();
-      })
-      .then((user) => {
-        setCurrentUser(user);
-        setActiveModal("");
-      })
-      .catch((error) => {
-        console.error("Error during signup:", error);
-        if (onError) {
-          onError(error);
-        }
-      });
+  const handleSignup = useCallback(async ({ email, password, name, avatar }, onError) => {
+    try {
+      await signup({ email, password, name, avatar });
+      // Auto sign-in after registration
+      const data = await signin({ email, password });
+      localStorage.setItem('jwt', data.token);
+      setIsLoggedIn(true);
+      const user = await getCurrentUser();
+      setCurrentUser(user);
+      setActiveModal("");
+    } catch (error) {
+      console.error("Error during signup:", error);
+      if (onError) {
+        onError(error);
+      }
+    }
   }, []);
 
-  const handleLogin = useCallback(({ email, password }, onError) => {
-    signin({ email, password })
-      .then((data) => {
-        localStorage.setItem('jwt', data.token);
-        setIsLoggedIn(true);
-        return getCurrentUser();
-      })
-      .then((user) => {
-        setCurrentUser(user);
-        setActiveModal("");
-      })
-      .catch((error) => {
-        console.error("Error during login:", error);
-        if (onError) {
-          onError(error);
-        }
-      });
+  const handleLogin = useCallback(async ({ email, password }, onError) => {
+    try {
+      const data = await signin({ email, password });
+      localStorage.setItem('jwt', data.token);
+      setIsLoggedIn(true);
+      const user = await getCurrentUser();
+      setCurrentUser(user);
+      setActiveModal("");
+    } catch (error) {
+      console.error("Error during login:", error);
+      if (onError) {
+        onError(error);
+      }
+    }
   }, []);
 
   const handleLogout = useCallback(() => {
@@ -177,41 +170,42 @@ function App() {
     navigate('/');
   }, [navigate]);
 
-  const handleUpdateProfile = useCallback(({ name, avatar }, onError) => {
-    updateUser({ name, avatar })
-      .then((updatedUser) => {
-        setCurrentUser(updatedUser);
-        // Trigger confetti
-        confetti({
-          particleCount: 100,
-          spread: 70,
-          origin: { y: 0.6 }
-        });
-        // Close modal after a short delay
-        setTimeout(() => {
-          setActiveModal("");
-        }, 1000);
-      })
-      .catch((error) => {
-        console.error("Error updating profile:", error);
-        if (onError) {
-          onError(error);
-        }
+  const handleUpdateProfile = useCallback(async ({ name, avatar }, onError) => {
+    try {
+      const updatedUser = await updateUser({ name, avatar });
+      setCurrentUser(updatedUser);
+      // Trigger confetti
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 }
       });
+      // Close modal after a short delay
+      setTimeout(() => {
+        setActiveModal("");
+      }, 1000);
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      if (onError) {
+        onError(error);
+      }
+    }
   }, []);
 
-  const handleCardLike = useCallback((itemId, isLiked) => {
-    const apiCall = isLiked ? unlikeItem(itemId) : likeItem(itemId);
-    
-    apiCall
-      .then((updatedItem) => {
-        setAllClothingItems((prevItems) =>
-          prevItems.map((item) => 
-            item._id === itemId ? { ...updatedItem, link: updatedItem.imageUrl } : item
-          )
-        );
-      })
-      .catch((error) => console.error("Error toggling like:", error));
+  const handleCardLike = useCallback(async (itemId, isLiked) => {
+    try {
+      const updatedItem = isLiked
+        ? await unlikeItem(itemId)
+        : await likeItem(itemId);
+
+      setAllClothingItems((prevItems) =>
+        prevItems.map((item) =>
+          item._id === itemId ? { ...updatedItem, link: updatedItem.imageUrl } : item
+        )
+      );
+    } catch (error) {
+      console.error("Error toggling like:", error);
+    }
   }, []);
 
   const handleSwitchToLogin = useCallback(() => {
@@ -223,21 +217,43 @@ function App() {
   }, []);
 
   useEffect(() => {
-    // Check if user is already logged in
-    const token = localStorage.getItem('jwt');
-    if (token) {
-      getCurrentUser()
-        .then((user) => {
+    const initializeApp = async () => {
+      // Check if user is already logged in
+      const token = localStorage.getItem('jwt');
+      if (token) {
+        try {
+          const user = await getCurrentUser();
           setCurrentUser(user);
           setIsLoggedIn(true);
-        })
-        .catch((error) => {
+        } catch (error) {
           console.error("Error verifying token:", error);
           localStorage.removeItem('jwt');
           setIsLoggedIn(false);
           setCurrentUser(null);
-        });
-    }
+        }
+      }
+
+      // Fetch clothing items
+      try {
+        const items = await getItems();
+        const itemsWithLink = items.map((item) => ({
+          ...item,
+          link: item.imageUrl,
+        }));
+        setAllClothingItems(itemsWithLink);
+      } catch (error) {
+        console.error("Error fetching items:", error);
+      }
+    };
+
+    const fetchWeatherData = async (latitude, longitude) => {
+      try {
+        const data = await getWeather(latitude, longitude);
+        setWeatherData(data);
+      } catch (error) {
+        console.error("Error fetching weather data:", error);
+      }
+    };
 
     // Get user's location using Geolocation API
     if (navigator.geolocation) {
@@ -245,20 +261,12 @@ function App() {
         (position) => {
           const { latitude, longitude } = position.coords;
           // Fetch weather data with user's coordinates
-          getWeather(latitude, longitude)
-            .then(setWeatherData)
-            .catch((error) =>
-              console.error("Error fetching weather data:", error)
-            );
+          fetchWeatherData(latitude, longitude);
         },
         (error) => {
           console.error("Error getting user location:", error.message);
           // Fallback to default location if geolocation fails
-          getWeather(59.5594, 150.8128)
-            .then(setWeatherData)
-            .catch((error) =>
-              console.error("Error fetching weather data:", error)
-            );
+          fetchWeatherData(59.5594, 150.8128);
         }
       );
     } else {
@@ -267,20 +275,10 @@ function App() {
       /*
       Magadan, Russia are approximately 59.56° N latitude and 150.81° E longitude
       */
-      getWeather(59.56, 150.81)
-        .then(setWeatherData)
-        .catch((error) => console.error("Error fetching weather data:", error));
+      fetchWeatherData(59.56, 150.81);
     }
 
-    getItems()
-      .then((items) => {
-        const itemsWithLink = items.map((item) => ({
-          ...item,
-          link: item.imageUrl,
-        }));
-        setAllClothingItems(itemsWithLink);
-      })
-      .catch((error) => console.error("Error fetching items:", error));
+    initializeApp();
   }, []);
 
   useEffect(() => {
