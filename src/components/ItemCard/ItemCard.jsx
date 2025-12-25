@@ -6,6 +6,9 @@ function ItemCard(props) {
   const { currentUser, isLoggedIn } = useContext(CurrentUserContext);
   const isLiked = props.data.likes?.some((id) => id === currentUser?._id);
 
+  // Check if current user is the owner of the item
+  const isOwner = currentUser && (props.data.owner?._id === currentUser._id || props.data.owner === currentUser._id);
+
   // Handler that calls onClick with the card data when clicked
   const handleCardClick = () => {
     props.onClick(props.data);
@@ -37,7 +40,9 @@ function ItemCard(props) {
           )}
         </div>
         {props.data.owner?.name && (
-          <p className="card__owner">By {props.data.owner.name}</p>
+          <p className={`card__owner ${isOwner ? 'card__owner_current-user' : 'card__owner_other-user'}`}>
+            By {props.data.owner.name}
+          </p>
         )}
       </div>
       <img src={props.data.imageUrl} alt={props.data.name} className="card__image" onClick={handleCardClick} />

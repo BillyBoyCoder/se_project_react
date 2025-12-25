@@ -37,13 +37,20 @@
   margin: 0;
   padding: 0 8px;
   font-family: 'Cabinet Grotesk', 'Helvetica Neue', Arial, sans-serif;
-  font-weight: 400;
+  font-weight: 700;
   font-size: 12px;
   line-height: 16px;
-  color: rgba(0, 0, 0, 0.6);
   background-color: #FFFFFF;
   border-radius: 4px;
   width: fit-content;
+}
+
+.card__owner_current-user {
+  color: #28A745;
+}
+
+.card__owner_other-user {
+  color: #DC3545;
 }
 
 .card__image {
