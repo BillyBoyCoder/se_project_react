@@ -12,7 +12,7 @@ function ItemModal({ isOpen, card, onClose, onDeleteItem, onEditItem }) {
   if (!card) return null;
 
   // Check if current user is the owner of the item
-  const isOwner = currentUser && card.owner === currentUser._id;
+  const isOwner = currentUser && (card.owner._id === currentUser._id || card.owner === currentUser._id);
 
   return (
     <div className={`modal ${isOpen ? 'modal_is-opened' : ''}`} onClick={onClose}>
