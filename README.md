@@ -89,9 +89,12 @@ The hybrid approach does introduce slightly more complexity in terms of CORS con
 
 Create a full-stack web application called "WTWR". This application will read weather data from a [Weather API](https://openweathermap.org/) and then recommend suitable clothing to the user based on that data. In this project, your objective is to create a front end for the application using the fundamental principles of React.
 
-## Video Pitch: WTWR React Routes - Sprint 11
+## Project Pitch Videos
 
-[View Video Pitch](https://drive.google.com/drive/folders/10MJeVvLkVELGmMRfRK0Yz-gqNR1B7fyx)
+Check out these videos, where I describe my project and some challenges I faced while building it:
+
+- [Project Pitch Video - Latest](https://drive.google.com/file/d/1miQFB_EQpHXqcUEN1QN4GhQJeZPutx_W/view?usp=sharing)
+- [WTWR React Routes - Sprint 11](https://drive.google.com/drive/folders/10MJeVvLkVELGmMRfRK0Yz-gqNR1B7fyx)
 
 ## How to Run the Application Locally
 
